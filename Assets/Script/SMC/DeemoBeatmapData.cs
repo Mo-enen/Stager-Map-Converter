@@ -77,11 +77,11 @@
 					new Beatmap.Stage() { // Bottom
 						Duration = float.MaxValue,
 						Rotation = 0f,
-						Speed = 1f,
+						Speed = 2f / 3f,
 						Time = 0f,
 						Width = 1f,
-						Height = 2f / 3f,
-						Angle = 45f,
+						Height = 1f,
+						Angle = 30f,
 						X = 0.5f,
 						Y = 0f,
 						Heights ={ },
@@ -99,20 +99,35 @@
 						Width = 1f,
 						X = 0.5f,
 						HasTray = false,
-						Color = 9,
+						Color = 1,
 						Xs = { },
 						Widths = { },
 						Colors = { },
 					},
 				},
-				Notes = new List<Beatmap.Note>(new Beatmap.Note[noteCount]),
 			};
+			// Note Array
+			var realIDs = new int[noteCount];
+			int realNoteCount = 0;
+			for (int i = 0, id = 0; i < noteCount; i++) {
+				var dNote = dMap.notes[i];
+				if (dNote.pos >= -2.01f && dNote.pos <= 2.01f) {
+					realIDs[i] = id;
+					id++;
+					realNoteCount = id;
+				} else {
+					realIDs[i] = -1;
+				}
+			}
 			// Notes
+			data.Notes = new List<Beatmap.Note>(new Beatmap.Note[realNoteCount]);
 			for (int i = 0; i < noteCount; i++) {
 				var dNote = dMap.notes[i];
 				int id = dNote.__id - 1;
-				if (id >= 0 && id < noteCount) {
-					data.Notes[id] = new Beatmap.Note() {
+				if (id < 0 || id >= noteCount) { continue; }
+				int realID = realIDs[id];
+				if (realID >= 0) {
+					data.Notes[realID] = new Beatmap.Note() {
 						Time = dNote._time,
 						X = Util.Remap(-2f, 2f, 0.1f, 0.9f, dNote.pos),
 						Width = dNote.size / 5f,
@@ -130,20 +145,24 @@
 			for (int i = 0; i < dMap.links.Length; i++) {
 				var dLink = dMap.links[i];
 				if (dLink.notes != null && dLink.notes.Length > 0) {
+					int prevRealID = -1;
 					for (int j = 0; j < dLink.notes.Length; j++) {
-						int id = dLink.notes[j].__ref;
+						int id = dLink.notes[j].__ref - 1;
 						if (id >= 0 && id < noteCount) {
-							data.Notes[id].Tap = false;
+							int realID = realIDs[id];
+							if (realID >= 0 && realID < realNoteCount) {
+								// Slide
+								data.Notes[realID].Tap = false;
+								if (prevRealID >= 0 && prevRealID < realNoteCount) {
+									// Link
+									data.Notes[prevRealID].LinkedNoteIndex = realID;
+								}
+							}
+							prevRealID = realID;
+						} else {
+							prevRealID = -1;
 						}
 					}
-				}
-			}
-			// Remove Needless Notes
-			for (int i = 0; i < data.Notes.Count; i++) {
-				var note = data.Notes[i];
-				if (note.X < 0.05f || note.X > 0.95f) {
-					data.Notes.RemoveAt(i);
-					i--;
 				}
 			}
 			// Final
@@ -157,16 +176,42 @@
 			sMap.SortNotesByTime();
 			int noteCount = sMap.Notes.Count;
 			var dMap = new DeemoBeatmapData() {
-				speed = sMap.Stages[0].Speed * 10f,
+				speed = sMap.DropSpeed * 10f,
 				notes = new NoteData[noteCount],
-				links = new LinkData[1] { new LinkData() }
 			};
 			// Notes
-			List<int> taplessID = new List<int>();
+			var linkMap = new Dictionary<int, List<int>>();
 			for (int i = 0; i < noteCount; i++) {
 				var sNote = sMap.Notes[i];
-				if (!sNote.Tap) {
-					taplessID.Add(i);
+				int linkIndex = sNote.LinkedNoteIndex;
+				if (linkIndex >= 0 && linkIndex < noteCount) {
+					// Link Map
+					if (!linkMap.ContainsKey(i)) {
+						if (!linkMap.ContainsKey(linkIndex)) {
+							// Get List
+							int index = i;
+							var list = new List<int>();
+							int safe = 0;
+							while (index >= 0 && index < noteCount) {
+								list.Add(index);
+								index = sMap.Notes[index].LinkedNoteIndex;
+								safe++;
+								if (safe > noteCount + 1) { break; }
+							}
+							// Add to Map
+							if (list.Count > 0) {
+								linkMap.Add(i, list);
+								for (int i1 = 1; i1 < list.Count; i1++) {
+									int lIndex = list[i1];
+									if (linkMap.ContainsKey(lIndex)) {
+										linkMap[lIndex].Clear();
+									} else {
+										linkMap.Add(lIndex, new List<int>());
+									}
+								}
+							}
+						}
+					}
 				}
 				dMap.notes[i] = new NoteData() {
 					__id = i + 1,
@@ -177,11 +222,23 @@
 				};
 			}
 			// Links
-			dMap.links[0].notes = new LinkData.LinkedNote[taplessID.Count];
-			for (int i = 0; i < taplessID.Count; i++) {
-				dMap.links[0].notes[i] = new LinkData.LinkedNote() {
-					__ref = taplessID[i] + 1,
-				};
+			var finalLinkedList = new List<int[]>();
+			foreach (var pair in linkMap) {
+				if (pair.Value != null && pair.Value.Count > 0) {
+					finalLinkedList.Add(pair.Value.ToArray());
+				}
+			}
+			dMap.links = new LinkData[finalLinkedList.Count];
+			if (finalLinkedList.Count > 0) {
+				for (int i1 = 0; i1 < finalLinkedList.Count; i1++) {
+					int[] list = finalLinkedList[i1];
+					dMap.links[i1] = new LinkData() {
+						notes = new LinkData.LinkedNote[list.Length],
+					};
+					for (int i = 0; i < list.Length; i++) {
+						dMap.links[i1].notes[i] = new LinkData.LinkedNote() { __ref = list[i] + 1 };
+					}
+				}
 			}
 			// Final
 			return dMap;
