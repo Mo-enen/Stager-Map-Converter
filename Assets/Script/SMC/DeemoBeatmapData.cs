@@ -58,16 +58,6 @@
 
 
 
-		#region --- MSG ---
-
-
-
-
-		#endregion
-
-
-
-
 		#region --- API ---
 
 
@@ -129,7 +119,7 @@
 						Tap = true,
 						LinkedNoteIndex = -1,
 						Duration = 0f,
-						ClickSoundIndex = 0,
+						ClickSoundIndex = (byte)(dNote.sounds == null || dNote.sounds.Length == 0 ? -1 : 0),
 						SwipeX = 1,
 						SwipeY = 1,
 						TrackIndex = 0,
@@ -146,6 +136,14 @@
 							data.Notes[id].Tap = false;
 						}
 					}
+				}
+			}
+			// Remove Needless Notes
+			for (int i = 0; i < data.Notes.Count; i++) {
+				var note = data.Notes[i];
+				if (note.X < 0.05f || note.X > 0.95f) {
+					data.Notes.RemoveAt(i);
+					i--;
 				}
 			}
 			// Final
@@ -175,7 +173,7 @@
 					_time = sNote.Time,
 					pos = Util.Remap(0.1f, 0.9f, -2f, 2f, sNote.X),
 					size = sNote.Width * 5f,
-					sounds = new NoteData.SoundData[1] { new NoteData.SoundData() },
+					sounds = sNote.ClickSoundIndex >= 0 ? new NoteData.SoundData[1] { new NoteData.SoundData() { d = 0f, p = 0, v = 0, } } : null,
 				};
 			}
 			// Links
@@ -188,26 +186,6 @@
 			// Final
 			return dMap;
 		}
-
-
-		#endregion
-
-
-
-
-		#region --- LGC ---
-
-
-
-
-		#endregion
-
-
-
-
-		#region --- UTL ---
-
-
 
 
 		#endregion
