@@ -2186,15 +2186,6 @@ MonoBehaviour:
   m_Mark: {fileID: 1411332078}
   m_SuccessMark: {fileID: 21300000, guid: efb29b49914e8ea47bbbef3d299ad013, type: 3}
   m_FailMark: {fileID: 21300000, guid: e5808ddbb8d42a24dadc242d36dc7356, type: 3}
-  m_DynamixGene: {fileID: 4900000, guid: 46b4739300bc88a4ca3dce51f186b508, type: 3}
-  m_VoezGene: {fileID: 4900000, guid: 0af63a24383df974cab539f872e3dcec, type: 3}
-  m_DeemoGene: {fileID: 4900000, guid: 5c43ded35059fbf4b8cd39923c931bb0, type: 3}
-  m_DynamixTween: {fileID: 4900000, guid: 42a05c5d4cd57054e83d95fac72a1a0b, type: 3}
-  m_VoezTween: {fileID: 4900000, guid: 26808e66a372ba24fb462a0becef9c0b, type: 3}
-  m_DeemoTween: {fileID: 4900000, guid: 4e2c32bf974f305479792013a50d8097, type: 3}
-  m_DynamixPalette: {fileID: 2800000, guid: 52d598451ce590d42b6af2517a1b53e8, type: 3}
-  m_VoezPalette: {fileID: 2800000, guid: 097c3c46073f90745be019ddb31fdc3f, type: 3}
-  m_DeemoPalette: {fileID: 2800000, guid: 900e8df610f0d3e42a2c79e6944c33aa, type: 3}
 --- !u!114 &1297536788
 MonoBehaviour:
   m_ObjectHideFlags: 0

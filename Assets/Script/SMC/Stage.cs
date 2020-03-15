@@ -25,17 +25,7 @@
 		[SerializeField] private Image m_Mark = null;
 		[SerializeField] private Sprite m_SuccessMark = null;
 		[SerializeField] private Sprite m_FailMark = null;
-		[Header("Assets")]
-		[SerializeField] private TextAsset m_DynamixGene = null;
-		[SerializeField] private TextAsset m_VoezGene = null;
-		[SerializeField] private TextAsset m_DeemoGene = null;
-		[SerializeField] private TextAsset m_DynamixTween = null;
-		[SerializeField] private TextAsset m_VoezTween = null;
-		[SerializeField] private TextAsset m_DeemoTween = null;
-		[SerializeField] private Texture2D m_DynamixPalette = null;
-		[SerializeField] private Texture2D m_VoezPalette = null;
-		[SerializeField] private Texture2D m_DeemoPalette = null;
-
+		
 
 		#endregion
 
@@ -76,10 +66,6 @@
 					Util.CreateFolder(rootPath);
 					// Map
 					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
-					// Assets
-					Util.TextToFile(m_DynamixGene.text, Util.CombinePaths(rootPath, "Assets", m_DynamixGene.name + ".json"));
-					Util.TextToFile(m_DynamixTween.text, Util.CombinePaths(rootPath, "Assets", m_DynamixTween.name + ".json"));
-					Util.ByteToFile(m_DynamixPalette.EncodeToPNG(), Util.CombinePaths(rootPath, "Assets", m_DynamixPalette.name + ".png"));
 					// Final
 					successCount++;
 				} catch { }
@@ -146,10 +132,6 @@
 			Util.CreateFolder(rootPath);
 			// Map
 			Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(notePath) + ".json"));
-			// Assets
-			Util.TextToFile(m_VoezGene.text, Util.CombinePaths(rootPath, "Assets", m_VoezGene.name + ".json"));
-			Util.TextToFile(m_VoezTween.text, Util.CombinePaths(rootPath, "Assets", m_VoezTween.name + ".json"));
-			Util.ByteToFile(m_VoezPalette.EncodeToPNG(), Util.CombinePaths(rootPath, "Assets", m_VoezPalette.name + ".png"));
 			// Hint
 			ShowHint("Success! Stager beatmaps created next to the original file.", true);
 		}
@@ -214,10 +196,6 @@
 					Util.CreateFolder(rootPath);
 					// Map
 					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
-					// Assets
-					Util.TextToFile(m_DeemoGene.text, Util.CombinePaths(rootPath, "Assets", m_DeemoGene.name + ".json"));
-					Util.TextToFile(m_DeemoTween.text, Util.CombinePaths(rootPath, "Assets", m_DeemoTween.name + ".json"));
-					Util.ByteToFile(m_DeemoPalette.EncodeToPNG(), Util.CombinePaths(rootPath, "Assets", m_DeemoPalette.name + ".png"));
 					// Final
 					successCount++;
 				} catch { }
@@ -250,28 +228,6 @@
 			} else {
 				ShowHint("Fail! Can\'t load stager file.", false);
 			}
-		}
-
-
-		// Set Assets from Sync
-		public void SetGenes (TextAsset dynamixGene, TextAsset voezGene, TextAsset deemoGene) {
-			m_DynamixGene = dynamixGene;
-			m_VoezGene = voezGene;
-			m_DeemoGene = deemoGene;
-		}
-
-
-		public void SetPals (Texture2D dynamixPal, Texture2D voezPal, Texture2D deemoPal) {
-			m_DynamixPalette = dynamixPal;
-			m_VoezPalette = voezPal;
-			m_DeemoPalette = deemoPal;
-		}
-
-
-		public void SetTweens (TextAsset dynamixTween, TextAsset voezTween, TextAsset deemoTween) {
-			m_DynamixTween = dynamixTween;
-			m_VoezTween = voezTween;
-			m_DeemoTween = deemoTween;
 		}
 
 
