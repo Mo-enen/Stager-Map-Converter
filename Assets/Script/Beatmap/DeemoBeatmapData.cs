@@ -134,7 +134,7 @@
 						Tap = true,
 						LinkedNoteIndex = -1,
 						Duration = 0f,
-						ClickSoundIndex = (byte)(dNote.sounds == null || dNote.sounds.Length == 0 ? -1 : 0),
+						ClickSoundIndex = (short)(dNote.sounds == null || dNote.sounds.Length == 0 ? -1 : 0),
 						SwipeX = 1,
 						SwipeY = 1,
 						TrackIndex = 0,

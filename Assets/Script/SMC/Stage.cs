@@ -25,7 +25,7 @@
 		[SerializeField] private Image m_Mark = null;
 		[SerializeField] private Sprite m_SuccessMark = null;
 		[SerializeField] private Sprite m_FailMark = null;
-		
+
 
 		#endregion
 
@@ -225,6 +225,55 @@
 			}
 			if (successCount > 0) {
 				ShowHint("Success! Deemo JSON files created next to the original file.", true);
+			} else {
+				ShowHint("Fail! Can\'t load stager file.", false);
+			}
+		}
+
+
+		// Osu
+		public void UI_Osu_To_Stager () {
+			var paths = DialogUtil.PickFilesDialog("Pick OSU Map files", "Osu", "osu", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			foreach (var path in paths) {
+				try {
+					var osu = Util.FileToText(path);
+					var sMap = OsuBeatmapData.Osu_to_Stager(osu);
+					if (sMap is null) { continue; }
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Osu_to_Stager");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
+					// Final
+					successCount++;
+				} catch { }
+			}
+			if (successCount > 0) {
+				ShowHint("Success! Stager beatmaps created next to the original file.", true);
+			} else {
+				ShowHint("Fail! Can\'t load osu file.", false);
+			}
+		}
+
+
+		public void UI_Stager_To_Osu () {
+			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			foreach (var path in paths) {
+				try {
+					var sMap = JsonUtility.FromJson<Beatmap>(Util.FileToText(path));
+					var osu = OsuBeatmapData.Stager_to_Osu(sMap, Util.GetNameWithoutExtension(path));
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Stager_to_Osu");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(osu, Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".osu"));
+					successCount++;
+				} catch { }
+			}
+			if (successCount > 0) {
+				ShowHint("Success! OSU files created next to the original file.", true);
 			} else {
 				ShowHint("Fail! Can\'t load stager file.", false);
 			}
