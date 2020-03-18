@@ -55,7 +55,7 @@
 				if (strs.Length > 5 && !string.IsNullOrEmpty(strs[5])) {
 					var samples = strs[5].Split(':');
 					if (samples != null && samples.Length > 0 && int.TryParse(samples[0], out int endTime)) {
-						EndTime = endTime;
+						EndTime = Hold ? endTime : 0;
 					}
 				}
 				return true;
@@ -177,7 +177,7 @@
 						X = 0.5f,
 						TrackIndex = Mathf.FloorToInt(hit.X * columnCount / 512f),
 						ClickSoundIndex = 0,
-						Duration = !hit.Hold ? 0f : (hit.EndTime - hit.Time) / 1000f,
+						Duration = !hit.Hold ? 0f : Mathf.Max((hit.EndTime - hit.Time) / 1000f, 0f),
 						LinkedNoteIndex = -1,
 						SwipeX = 1,
 						SwipeY = 1,
@@ -237,7 +237,6 @@
 			// Final
 			return data;
 		}
-
 
 
 		public static string Stager_to_Osu (Beatmap map, string name) {
@@ -320,7 +319,6 @@
 			Timings.Clear();
 			return builder.ToString();
 		}
-
 
 
 		private static float BL_to_BPM (float bl) => 1f / bl * 1000f * 60f;
