@@ -53,6 +53,7 @@
 		}
 
 
+		// Const
 		private static string[] TWEEN_NAMES { get; } = new string[34] {
 			"const",
 
@@ -126,7 +127,7 @@
 						Rotation = 0f,
 						Speed = 1f,
 						Time = 0f,
-						Width = 1f,
+						Width = 0.8f,
 						Height = 2f / 3f,
 						Angle = 0f,
 						X = 0.5f,
@@ -149,7 +150,7 @@
 				data.Notes.Add(new Beatmap.Note() {
 					TrackIndex = vNote.Track,
 					Time = vNote.Time,
-					Duration = vNote.Hold,
+					Duration = type == NoteType.Hold ? vNote.Hold : 0f,
 					Tap = type != NoteType.Slide,
 					SwipeX = (byte)(type == NoteType.SwipeLeft ? 0 : type == NoteType.SwipeRight ? 2 : 1),
 					X = 0.5f,
@@ -177,7 +178,7 @@
 					Xs = GetMovementArrayFromVoezData(
 						vTrack.Move, vTrack.End, -vTrack.X,
 						-vTrack.Start, 0f,
-						0.1f, 0.9f
+						0f, 1f
 					),
 					Widths = GetMovementArrayFromVoezData(
 						vTrack.Scale, vTrack.End, 0f,
@@ -236,10 +237,10 @@
 						sTrack.Xs.Count > 0 ? sTrack.Xs[sTrack.Xs.Count - 1].Time : 0),
 						sTrack.Widths.Count > 0 ? sTrack.Widths[sTrack.Widths.Count - 1].Time : 0
 					) + sTrack.Time,
-					X = Mathf.Clamp01(Util.Remap(0.1f, 0.9f, 0f, 1f, sTrack.X)),
+					X = Mathf.Clamp01(Util.Remap(0f, 1f, 0f, 1f, sTrack.X)),
 					Size = sTrack.Width,
 					Color = sTrack.Color,
-					Move = GetVoezMovementArray(sTrack.Xs, sTrack.X, sTrack.Time, 0.1f, 0.9f),
+					Move = GetVoezMovementArray(sTrack.Xs, sTrack.X, sTrack.Time, 0f, 1f),
 					Scale = GetVoezMovementArray(sTrack.Widths, 0f, sTrack.Time, 0f, 10f),
 					ColorChange = GetVoezMovementArray(sTrack.Colors, 0, sTrack.Time, 0f, 1f),
 					EntranceOn = true,

@@ -22,6 +22,7 @@
 		[SerializeField] private RectTransform m_HintContainer = null;
 		[SerializeField] private Text m_Hint = null;
 		[SerializeField] private Text m_Tip = null;
+		[SerializeField] private Text m_Version = null;
 		[SerializeField] private Image m_Mark = null;
 		[SerializeField] private Sprite m_SuccessMark = null;
 		[SerializeField] private Sprite m_FailMark = null;
@@ -39,6 +40,7 @@
 			Application.targetFrameRate = 60;
 			QualitySettings.vSyncCount = 2;
 			TooltipUI.TipLabel = m_Tip;
+			m_Version.text = Application.version;
 		}
 
 
