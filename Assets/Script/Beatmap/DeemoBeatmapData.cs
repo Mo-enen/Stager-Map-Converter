@@ -63,6 +63,17 @@
 
 		public static Beatmap DMap_to_SMap (DeemoBeatmapData dMap) {
 			if (dMap is null || dMap.notes is null) { return null; }
+			// Fix Deemo ID
+			for (int i = 0; i < dMap.notes.Length; i++) {
+				dMap.notes[i].__id--;
+			}
+			for (int i = 0; i < dMap.links.Length; i++) {
+				var link = dMap.links[i];
+				for (int j = 0; j < link.notes.Length; j++) {
+					dMap.links[i].notes[j].__ref--;
+				}
+			}
+			// Start
 			int noteCount = dMap.notes.Length;
 			var data = new Beatmap {
 				BPM = 120f,
@@ -79,7 +90,7 @@
 						Rotation = 0f,
 						Speed = 2f / 3f,
 						Time = 0f,
-						Width = 1f,
+						Width = 0.8f,
 						Height = 1f,
 						Angle = 30f,
 						X = 0.5f,
@@ -109,27 +120,25 @@
 			// Note Array
 			var realIDs = new int[noteCount];
 			int realNoteCount = 0;
-			for (int i = 0, id = 0; i < noteCount; i++) {
+			for (int i = 0; i < noteCount; i++) {
 				var dNote = dMap.notes[i];
 				if (dNote.pos >= -2.01f && dNote.pos <= 2.01f) {
-					realIDs[i] = id;
-					id++;
-					realNoteCount = id;
+					realIDs[i] = realNoteCount;
+					realNoteCount++;
 				} else {
 					realIDs[i] = -1;
+					dMap.notes[i] = null;
 				}
 			}
 			// Notes
 			data.Notes = new List<Beatmap.Note>(new Beatmap.Note[realNoteCount]);
 			for (int i = 0; i < noteCount; i++) {
 				var dNote = dMap.notes[i];
-				int id = dNote.__id - 1;
-				if (id < 0 || id >= noteCount) { continue; }
-				int realID = realIDs[id];
-				if (realID >= 0) {
+				int realID = realIDs[i];
+				if (dNote != null && realID >= 0) {
 					data.Notes[realID] = new Beatmap.Note() {
 						Time = dNote._time,
-						X = Util.Remap(-2f, 2f, 0.1f, 0.9f, dNote.pos),
+						X = Util.Remap(-2f, 2f, 0f, 1f, dNote.pos),
 						Width = dNote.size / 5f,
 						Tap = true,
 						LinkedNoteIndex = -1,
@@ -144,23 +153,17 @@
 			// Links
 			for (int i = 0; i < dMap.links.Length; i++) {
 				var dLink = dMap.links[i];
-				if (dLink.notes != null && dLink.notes.Length > 0) {
-					int prevRealID = -1;
+				if (dLink.notes != null) {
 					for (int j = 0; j < dLink.notes.Length; j++) {
-						int id = dLink.notes[j].__ref - 1;
-						if (id >= 0 && id < noteCount) {
-							int realID = realIDs[id];
-							if (realID >= 0 && realID < realNoteCount) {
-								// Slide
-								data.Notes[realID].Tap = false;
-								if (prevRealID >= 0 && prevRealID < realNoteCount) {
-									// Link
-									data.Notes[prevRealID].LinkedNoteIndex = realID;
-								}
-							}
-							prevRealID = realID;
-						} else {
-							prevRealID = -1;
+						int refID = dLink.notes[j].__ref;
+						if (refID < 0 || refID >= noteCount) { continue; }
+						int realID = realIDs[refID];
+						if (realID < 0 || realID >= noteCount) { continue; }
+						// Slide
+						data.Notes[realID].Tap = false;
+						// Link to Next
+						if (j < dLink.notes.Length - 1) {
+							data.Notes[realID].LinkedNoteIndex = realIDs[dLink.notes[j + 1].__ref];
 						}
 					}
 				}
@@ -216,7 +219,7 @@
 				dMap.notes[i] = new NoteData() {
 					__id = i + 1,
 					_time = sNote.Time,
-					pos = Util.Remap(0.1f, 0.9f, -2f, 2f, sNote.X),
+					pos = Util.Remap(0f, 1f, -2f, 2f, sNote.X),
 					size = sNote.Width * 5f,
 					sounds = sNote.ClickSoundIndex >= 0 ? new NoteData.SoundData[1] { new NoteData.SoundData() { d = 0f, p = 0, v = 0, } } : null,
 				};

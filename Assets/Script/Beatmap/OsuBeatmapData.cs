@@ -227,7 +227,7 @@
 					var (time, speed) = speedList[i];
 					currentSpeed *= speed;
 					if (i == 0 || time != speedList[i - 1].time) {
-						data.SpeedNotes.Add(new Beatmap.SpeedNote(time / 1000f, 0f, currentSpeed));
+						data.SpeedNotes.Add(new Beatmap.SpeedNote(time / 1000f, currentSpeed));
 						currentSpeed = 1f;
 					}
 				}

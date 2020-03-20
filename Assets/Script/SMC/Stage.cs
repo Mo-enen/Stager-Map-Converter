@@ -188,19 +188,19 @@
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
 			foreach (var path in paths) {
-				try {
-					var json = Util.FileToText(path).Replace("$", "__");
-					var dMap = JsonUtility.FromJson<DeemoBeatmapData>(json);
-					if (dMap is null) { continue; }
-					var sMap = DeemoBeatmapData.DMap_to_SMap(dMap);
-					if (sMap is null) { continue; }
-					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Deemo_to_Stager");
-					Util.CreateFolder(rootPath);
-					// Map
-					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
-					// Final
-					successCount++;
-				} catch { }
+				//try {
+				var json = Util.FileToText(path).Replace("$", "__");
+				var dMap = JsonUtility.FromJson<DeemoBeatmapData>(json);
+				if (dMap is null) { continue; }
+				var sMap = DeemoBeatmapData.DMap_to_SMap(dMap);
+				if (sMap is null) { continue; }
+				var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Deemo_to_Stager");
+				Util.CreateFolder(rootPath);
+				// Map
+				Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
+				// Final
+				successCount++;
+				//} catch { }
 			}
 			if (successCount > 0) {
 				ShowHint("Success! Stager beatmaps created next to the original file.", true);

@@ -236,11 +236,9 @@
 		[System.Serializable]
 		public class SpeedNote {
 			public float Time;
-			public float Duration;
 			public float Speed;
-			public SpeedNote (float time, float duration, float speed) {
+			public SpeedNote (float time, float speed) {
 				Time = time;
-				Duration = duration;
 				Speed = speed;
 			}
 		}
@@ -316,24 +314,26 @@
 
 
 		public void LoadFromBytes (byte[] bytes) {
-
 			if (bytes is null) { return; }
+			LoadFromOtherMap(Util.BytesToObject(bytes) as Beatmap);
+		}
 
-			var map = Util.BytesToObject(bytes) as Beatmap;
-			if (map is null) { return; }
 
+		public void LoadFromOtherMap (Beatmap map, bool loadCreatedTime = true) {
+			if (map == null) { return; }
 			Tag = map.Tag;
 			Level = map.Level;
 			DropSpeed = map.DropSpeed;
 			BPM = map.BPM;
 			Shift = map.Shift;
 			Ratio = map.Ratio;
-			CreatedTime = map.CreatedTime;
+			if (loadCreatedTime) {
+				CreatedTime = map.CreatedTime;
+			}
 			Stages = map.Stages;
 			Tracks = map.Tracks;
 			Notes = map.Notes;
 			SpeedNotes = map.SpeedNotes;
-
 		}
 
 
@@ -352,16 +352,30 @@
 		public static implicit operator bool (Beatmap map) => map != null;
 
 
-		public void SortByTime () {
-			SortStagesByTime();
-			SortTracksByTime();
-			SortNotesByTime();
-			SortSpeedNotesByTime();
+		public void SortNotesByTime () {
+			// OldID / Note Map
+			var oldID_Note = new Dictionary<int, Note>();
+			int noteCount = Notes.Count;
+			for (int i = 0; i < noteCount; i++) {
+				oldID_Note.Add(i, Notes[i]);
+			}
+			// Sort
+			Notes.Sort(new NoteComparer());
+			// Note / NewID Map
+			var note_NewID = new Dictionary<Note, int>();
+			for (int i = 0; i < noteCount; i++) {
+				var note = Notes[i];
+				if (note_NewID.ContainsKey(note)) { continue; }
+				note_NewID.Add(note, i);
+			}
+			for (int i = 0; i < noteCount; i++) {
+				var note = Notes[i];
+				if (!oldID_Note.ContainsKey(note.LinkedNoteIndex)) { continue; }
+				var linkedNote = oldID_Note[note.LinkedNoteIndex];
+				if (!note_NewID.ContainsKey(linkedNote)) { continue; }
+				note.LinkedNoteIndex = note_NewID[linkedNote];
+			}
 		}
-		public void SortStagesByTime () => Stages.Sort(new StageComparer());
-		public void SortTracksByTime () => Tracks.Sort(new TrackComparer());
-		public void SortNotesByTime () => Notes.Sort(new NoteComparer());
-		public void SortSpeedNotesByTime () => SpeedNotes.Sort(new SpeedNoteComparer());
 
 
 
