@@ -138,7 +138,6 @@
 					Notes = new List<Beatmap.Note>(),
 					SpeedNotes = new List<Beatmap.SpeedNote>(),
 					Stages = new List<Beatmap.Stage>() { new Beatmap.Stage(){
-					Angle = 0f,
 					Duration = float.MaxValue,
 					Height = 0.6666f,
 					Rotation = 0f,
@@ -148,7 +147,6 @@
 					X = 0.5f,
 					Y = 0f,
 					Positions = { },
-					Angles = { },
 					Heights = { },
 					Rotations = { },
 					Widths = { },
@@ -163,12 +161,17 @@
 						Time = 0f,
 						Duration = float.MaxValue,
 						StageIndex = 0,
-						Color = 1,
+						Color = 3,
+						Angle = 0f,
 						HasTray = false,
 						Colors = { },
 						Widths = { },
 						Xs = { },
+						Angles = { },
 					});
+				}
+				for (int i = 0; i < columnCount / 2; i++) {
+					data.Tracks[i].Color = data.Tracks[columnCount - i - 1].Color = 2 - i % 2;
 				}
 				// Notes
 				foreach (var hit in Hits) {
@@ -210,7 +213,7 @@
 				for (int i = 0; i < Timings.Count; i++) {
 					var timing = Timings[i];
 					if (!bpmSetted && timing.BeatLength > 0f) {
-						data.BPM = BL_to_BPM(timing.BeatLength);
+						data.BPM = (int)BL_to_BPM(timing.BeatLength);
 						bpmSetted = true;
 					}
 					speedList.Add((
@@ -324,7 +327,7 @@
 		private static float BL_to_BPM (float bl) => 1f / bl * 1000f * 60f;
 
 
-		private static float BPM_to_BL (float bpm) => 1000f * 60f / bpm;
+		private static float BPM_to_BL (int bpm) => 1000f * 60f / bpm;
 
 
 

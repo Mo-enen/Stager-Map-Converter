@@ -113,7 +113,7 @@
 		public static Beatmap VMap_to_SMap (VoezBeatmapData vMap) {
 			if (vMap is null) { return null; }
 			var data = new Beatmap {
-				BPM = 120f,
+				BPM = 120,
 				Shift = 0f,
 				DropSpeed = 1f,
 				Level = 1,
@@ -129,14 +129,12 @@
 						Time = 0f,
 						Width = 0.8f,
 						Height = 2f / 3f,
-						Angle = 0f,
 						X = 0.5f,
 						Y = 0f,
 						Heights ={ },
 						Widths = { },
 						Positions = { },
 						Rotations = { },
-						Angles = { },
 					}
 				},
 				Tracks = new List<Beatmap.Track>(),
@@ -175,6 +173,7 @@
 					Duration = vTrack.End - vTrack.Start,
 					Width = vTrack.Size * 0.1f,
 					Color = (byte)vTrack.Color,
+					Angle = 0f,
 					Xs = GetMovementArrayFromVoezData(
 						vTrack.Move, vTrack.End, -vTrack.X,
 						-vTrack.Start, 0f,
@@ -192,6 +191,7 @@
 					),
 					StageIndex = 0,
 					HasTray = false,
+					Angles = { },
 				};
 			}
 			data.SortNotesByTime();
@@ -261,41 +261,69 @@
 		// Time Value ID
 		private static List<Beatmap.TimeFloatTween> GetMovementArrayFromVoezData (VoezTrackData.MovementItem[] source, float endTime, float valueOffset, float timeOffset, float startValue, float valueL, float valueR) {
 			var valueList = new List<Beatmap.TimeFloatTween> {
-				new Beatmap.TimeFloatTween(0f, startValue, 0)
+				new Beatmap.TimeFloatTween(){
+					Time = 0f,
+					Value = startValue,
+					Tween = 0,
+				}
 			};
 			float lastValue = Lerp(valueList[0].Value);
 			for (int j = 0; j < source.Length; j++) {
 				var move = source[j];
 				byte tweenID = GetTweenID(move.Ease);
 				if (Mathf.Abs(valueList[valueList.Count - 1].Time - (move.Start + timeOffset)) < 0.001f) {
-					valueList[valueList.Count - 1] = new Beatmap.TimeFloatTween(move.Start + timeOffset, lastValue, tweenID);
+					valueList[valueList.Count - 1] = new Beatmap.TimeFloatTween() {
+						Time = move.Start + timeOffset,
+						Value = lastValue,
+						Tween = tweenID,
+					};
 				} else {
-					valueList.Add(new Beatmap.TimeFloatTween(move.Start + timeOffset, lastValue, tweenID));
+					valueList.Add(new Beatmap.TimeFloatTween() {
+						Time = move.Start + timeOffset,
+						Value = lastValue,
+						Tween = tweenID,
+					});
 				}
 				lastValue = Lerp(move.To) + valueOffset;
-				valueList.Add(new Beatmap.TimeFloatTween(move.End + timeOffset, lastValue, 0));
+				valueList.Add(new Beatmap.TimeFloatTween() {
+					Time = move.End + timeOffset,
+					Value = lastValue,
+					Tween = 0,
+				});
 			}
-			valueList.Add(new Beatmap.TimeFloatTween(endTime + timeOffset, lastValue, 0));
+			valueList.Add(new Beatmap.TimeFloatTween() {
+				Time = endTime + timeOffset,
+				Value = lastValue,
+				Tween = 0,
+			});
 			return valueList;
 			// Func
 			float Lerp (float value) => Mathf.LerpUnclamped(valueL, valueR, value);
 		}
 
 
-		private static List<Beatmap.TimeByteTween> GetColorArrayFromVoezData (VoezTrackData.MovementItem[] source, float endTime, float valueOffset, float timeOffset, float startValue, float valueL, float valueR) {
+		private static List<Beatmap.TimeIntTween> GetColorArrayFromVoezData (VoezTrackData.MovementItem[] source, float endTime, float valueOffset, float timeOffset, float startValue, float valueL, float valueR) {
 			var tftList = GetMovementArrayFromVoezData(source, endTime, valueOffset, timeOffset, startValue, valueL, valueR);
-			var result = new List<Beatmap.TimeByteTween>();
+			var result = new List<Beatmap.TimeIntTween>();
 			foreach (var tft in tftList) {
-				result.Add(new Beatmap.TimeByteTween(tft.Time, (byte)Mathf.Clamp(tft.Value, 0f, 255f), tft.Tween));
+				result.Add(new Beatmap.TimeIntTween() {
+					Time = tft.Time,
+					Value = (int)Mathf.Clamp(tft.Value, 0f, 255f),
+					Tween = tft.Tween,
+				});
 			}
 			return result;
 		}
 
 
-		private static VoezTrackData.MovementItem[] GetVoezMovementArray (List<Beatmap.TimeByteTween> source, float valueOffset, float timeOffset, float valueL, float valueR) {
+		private static VoezTrackData.MovementItem[] GetVoezMovementArray (List<Beatmap.TimeIntTween> source, float valueOffset, float timeOffset, float valueL, float valueR) {
 			var list = new List<Beatmap.TimeFloatTween>();
 			foreach (var s in source) {
-				list.Add(new Beatmap.TimeFloatTween(s.Time, s.Value, s.Tween));
+				list.Add(new Beatmap.TimeFloatTween() {
+					Time = s.Time,
+					Value = s.Value,
+					Tween = s.Tween,
+				});
 			}
 			return GetVoezMovementArray(list, valueOffset, timeOffset, valueL, valueR);
 		}
@@ -304,7 +332,7 @@
 		private static VoezTrackData.MovementItem[] GetVoezMovementArray (List<Beatmap.TimeFloatTween> source, float valueOffset, float timeOffset, float valueL, float valueR) {
 			var movementList = new List<VoezTrackData.MovementItem>();
 			for (int i = 0; i < source.Count - 1; i++) {
-				byte tweenID = source[i].Tween;
+				int tweenID = source[i].Tween;
 				if (tweenID == 0) { continue; }
 				movementList.Add(new VoezTrackData.MovementItem() {
 					Start = source[i].Time + timeOffset,

@@ -76,7 +76,7 @@
 			// Start
 			int noteCount = dMap.notes.Length;
 			var data = new Beatmap {
-				BPM = 120f,
+				BPM = 120,
 				Shift = 0f,
 				DropSpeed = dMap.speed / 10f,
 				Level = 1,
@@ -92,14 +92,12 @@
 						Time = 0f,
 						Width = 0.8f,
 						Height = 1f,
-						Angle = 30f,
 						X = 0.5f,
 						Y = 0f,
 						Heights ={ },
 						Widths = { },
 						Positions = { },
 						Rotations = { },
-						Angles = { },
 					}
 				},
 				Tracks = new List<Beatmap.Track>() {
@@ -111,9 +109,11 @@
 						X = 0.5f,
 						HasTray = false,
 						Color = 1,
+						Angle = 30,
 						Xs = { },
 						Widths = { },
 						Colors = { },
+						Angles= { },
 					},
 				},
 			};

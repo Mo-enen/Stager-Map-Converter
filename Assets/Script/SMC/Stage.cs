@@ -58,6 +58,7 @@
 			var paths = DialogUtil.PickFilesDialog("Pick Dynamix XML files", "Dynamix XML", "xml", "txt");
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
+			string errorMsg = "";
 			foreach (var path in paths) {
 				try {
 					var dyMap = Util.ReadXML<DynamixBeatmapData>(path);
@@ -70,12 +71,14 @@
 					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
 					// Final
 					successCount++;
-				} catch { }
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
 			}
 			if (successCount > 0) {
 				ShowHint("Success! Stager beatmaps created next to the original file.", true);
 			} else {
-				ShowHint("Fail! Can\'t load xml file.", false);
+				ShowHint("Fail!\n" + errorMsg, false);
 			}
 		}
 
@@ -84,6 +87,7 @@
 			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
+			string errorMsg = "";
 			foreach (var path in paths) {
 				try {
 					var sMap = JsonUtility.FromJson<Beatmap>(Util.FileToText(path));
@@ -93,12 +97,14 @@
 					// Map
 					Util.WriteXML(dMap, Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".xml"));
 					successCount++;
-				} catch { }
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
 			}
 			if (successCount > 0) {
 				ShowHint("Success! Dynamix XML files created next to the original file.", true);
 			} else {
-				ShowHint("Fail! Can\'t load stager file.", false);
+				ShowHint("Fail!\n" + errorMsg, false);
 			}
 		}
 
@@ -109,33 +115,42 @@
 			if (string.IsNullOrEmpty(trackPath)) { return; }
 			var notePath = DialogUtil.PickFileDialog("Pick Voez [Note]", "Voez Note", "json", "txt");
 			if (string.IsNullOrEmpty(notePath)) { return; }
+			string errorMsg = "";
+			try {
 
-			string trackJson = Util.FileToText(trackPath);
-			string noteJson = Util.FileToText(notePath);
+				string trackJson = Util.FileToText(trackPath);
+				string noteJson = Util.FileToText(notePath);
 
-			if (string.IsNullOrEmpty(trackJson) || string.IsNullOrEmpty(noteJson)) {
-				ShowHint("Fail! Json file is empty.", false);
-				return;
+				if (string.IsNullOrEmpty(trackJson) || string.IsNullOrEmpty(noteJson)) {
+					ShowHint("Fail! Json file is empty.", false);
+					return;
+				}
+
+				var voezMap = JsonUtility.FromJson<VoezBeatmapData>(@"{""m_Tracks"":" + trackJson + @", ""m_Notes"":" + noteJson + @"}");
+				if (voezMap is null) {
+					ShowHint("Fail! Json file is wrong.", false);
+					return;
+				}
+
+				var sMap = VoezBeatmapData.VMap_to_SMap(voezMap);
+				if (sMap is null) {
+					ShowHint("Fail! Can\'t get Stager map.", false);
+					return;
+				}
+
+				var rootPath = Util.CombinePaths(Util.GetParentPath(notePath), "Voez_to_Stager");
+				Util.CreateFolder(rootPath);
+				// Map
+				Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(notePath) + ".json"));
+			} catch (System.Exception ex) {
+				errorMsg = ex.Message;
 			}
-
-			var voezMap = JsonUtility.FromJson<VoezBeatmapData>(@"{""m_Tracks"":" + trackJson + @", ""m_Notes"":" + noteJson + @"}");
-			if (voezMap is null) {
-				ShowHint("Fail! Json file is wrong.", false);
-				return;
-			}
-
-			var sMap = VoezBeatmapData.VMap_to_SMap(voezMap);
-			if (sMap is null) {
-				ShowHint("Fail! Can\'t get Stager map.", false);
-				return;
-			}
-
-			var rootPath = Util.CombinePaths(Util.GetParentPath(notePath), "Voez_to_Stager");
-			Util.CreateFolder(rootPath);
-			// Map
-			Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(notePath) + ".json"));
 			// Hint
-			ShowHint("Success! Stager beatmaps created next to the original file.", true);
+			if (string.IsNullOrEmpty(errorMsg)) {
+				ShowHint("Success! Stager beatmaps created next to the original file.", true);
+			} else {
+				ShowHint("Fail!\n" + errorMsg, false);
+			}
 		}
 
 
@@ -143,6 +158,7 @@
 			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
+			string errorMsg = "";
 			foreach (var path in paths) {
 				try {
 					var sMap = JsonUtility.FromJson<Beatmap>(Util.FileToText(path));
@@ -172,12 +188,14 @@
 					Util.TextToFile(voezNoteJson, Util.CombinePaths(rootPath, mapName + "_Note.json"));
 					Util.TextToFile(voezTrackJson, Util.CombinePaths(rootPath, mapName + "_Track.json"));
 					successCount++;
-				} catch { }
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
 			}
 			if (successCount > 0) {
 				ShowHint("Success! Voez Json files created inside a folder next to the original file.", true);
 			} else {
-				ShowHint("Fail! Can\'t load stager file.", false);
+				ShowHint("Fail!\n" + errorMsg, false);
 			}
 		}
 
@@ -187,25 +205,28 @@
 			var paths = DialogUtil.PickFilesDialog("Pick Deemo JSON files", "Deemo Json", "json", "txt");
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
+			string errorMsg = "";
 			foreach (var path in paths) {
-				//try {
-				var json = Util.FileToText(path).Replace("$", "__");
-				var dMap = JsonUtility.FromJson<DeemoBeatmapData>(json);
-				if (dMap is null) { continue; }
-				var sMap = DeemoBeatmapData.DMap_to_SMap(dMap);
-				if (sMap is null) { continue; }
-				var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Deemo_to_Stager");
-				Util.CreateFolder(rootPath);
-				// Map
-				Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
-				// Final
-				successCount++;
-				//} catch { }
+				try {
+					var json = Util.FileToText(path).Replace("$", "__");
+					var dMap = JsonUtility.FromJson<DeemoBeatmapData>(json);
+					if (dMap is null) { continue; }
+					var sMap = DeemoBeatmapData.DMap_to_SMap(dMap);
+					if (sMap is null) { continue; }
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Deemo_to_Stager");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
+					// Final
+					successCount++;
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
 			}
 			if (successCount > 0) {
 				ShowHint("Success! Stager beatmaps created next to the original file.", true);
 			} else {
-				ShowHint("Fail! Can\'t load json file.", false);
+				ShowHint("Fail!\n" + errorMsg, false);
 			}
 		}
 
@@ -214,6 +235,7 @@
 			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
+			string errorMsg = "";
 			foreach (var path in paths) {
 				try {
 					var sMap = JsonUtility.FromJson<Beatmap>(Util.FileToText(path));
@@ -223,12 +245,14 @@
 					// Map
 					Util.TextToFile(JsonUtility.ToJson(dMap, false).Replace("__", "$"), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
 					successCount++;
-				} catch { }
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
 			}
 			if (successCount > 0) {
 				ShowHint("Success! Deemo JSON files created next to the original file.", true);
 			} else {
-				ShowHint("Fail! Can\'t load stager file.", false);
+				ShowHint("Fail!\n" + errorMsg, false);
 			}
 		}
 
@@ -238,6 +262,7 @@
 			var paths = DialogUtil.PickFilesDialog("Pick OSU Map files", "Osu", "osu", "txt");
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
+			string errorMsg = "";
 			foreach (var path in paths) {
 				try {
 					var osu = Util.FileToText(path);
@@ -249,12 +274,14 @@
 					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
 					// Final
 					successCount++;
-				} catch { }
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
 			}
 			if (successCount > 0) {
 				ShowHint("Success! Stager beatmaps created next to the original file.", true);
 			} else {
-				ShowHint("Fail! Can\'t load osu file.", false);
+				ShowHint("Fail!\n" + errorMsg, false);
 			}
 		}
 
@@ -263,6 +290,7 @@
 			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
+			string errorMsg = "";
 			foreach (var path in paths) {
 				try {
 					var sMap = JsonUtility.FromJson<Beatmap>(Util.FileToText(path));
@@ -272,12 +300,71 @@
 					// Map
 					Util.TextToFile(osu, Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".osu"));
 					successCount++;
-				} catch { }
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
 			}
 			if (successCount > 0) {
 				ShowHint("Success! OSU files created next to the original file.", true);
 			} else {
-				ShowHint("Fail! Can\'t load stager file.", false);
+				ShowHint("Fail!\n" + errorMsg, false);
+			}
+		}
+
+
+		// Arcaea
+		public void UI_Arcaea_To_Stager () {
+			var paths = DialogUtil.PickFilesDialog("Pick Arcaea Map files", "AFF", "aff", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			string errorMsg = "";
+			foreach (var path in paths) {
+				//try {
+				var aMap = Util.FileToText(path);
+				var sMap = ArcaeaBeatmapData.Arcaea_To_Stager(aMap);
+				if (sMap is null) { continue; }
+				var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Arcaea_to_Stager");
+				Util.CreateFolder(rootPath);
+				// Map
+				Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
+				// Final
+				successCount++;
+				//} catch (System.Exception ex) {
+				//	errorMsg = ex.Message;
+				//}
+			}
+			// Hint
+			if (successCount > 0) {
+				ShowHint("Success! Stager beatmaps created next to the original file.", true);
+			} else {
+				ShowHint("Fail!\n" + errorMsg, false);
+			}
+
+		}
+
+
+		public void UI_Stager_To_Arcaea () {
+			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			string errorMsg = "";
+			foreach (var path in paths) {
+				try {
+					var sMap = JsonUtility.FromJson<Beatmap>(Util.FileToText(path));
+					var aMap = ArcaeaBeatmapData.Stager_To_Arcaea(sMap);
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Stager_to_Arcaea");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(aMap, Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".aff"));
+					successCount++;
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
+			}
+			if (successCount > 0) {
+				ShowHint("Success! Arcaea files created next to the original file.", true);
+			} else {
+				ShowHint("Fail!\n" + errorMsg, false);
 			}
 		}
 
