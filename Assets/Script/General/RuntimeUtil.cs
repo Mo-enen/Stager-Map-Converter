@@ -405,7 +405,7 @@
 
 
 		public static float Remap (float l, float r, float newL, float newR, float t) {
-			return l == r ? 0 : Mathf.LerpUnclamped(
+			return l == r ? newL : Mathf.LerpUnclamped(
 				newL, newR,
 				(t - l) / (r - l)
 			);

@@ -1,6 +1,7 @@
 ﻿namespace StagerStudio.Data {
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Text;
 	using UnityEngine;
 
 
@@ -9,27 +10,35 @@
 
 
 		public class ArcIntComparer : IComparer<(Arc, int)> {
-			public int Compare ((Arc, int) x, (Arc, int) y) => x.Item1.TimeStart.CompareTo(y.Item1.TimeStart);
+			public int Compare ((Arc, int) x, (Arc, int) y) => x.Item1.Time.CompareTo(y.Item1.Time);
+		}
+
+
+		public class ArcaeaItemComparer : IComparer<ArcaeaItem> {
+			public int Compare (ArcaeaItem a, ArcaeaItem b) => a.Time.CompareTo(b.Time);
 		}
 
 
 
-		public struct Note {
+		public class ArcaeaItem {
 			public int Time;
+		}
+
+
+
+		public class Note : ArcaeaItem {
 			public int Duration;
 			public int Lane;
 		}
 
 
-		public struct Timing {
-			public int Time;
+		public class Timing : ArcaeaItem {
 			public float BPM;
 			public float Beat;
 		}
 
 
-		public struct Arc {
-			public int TimeStart;
+		public class Arc : ArcaeaItem {
 			public int TimeEnd;
 			public float XStart;
 			public float XEnd;
@@ -46,8 +55,7 @@
 		private readonly static List<Note> Notes = new List<Note>();
 		private readonly static List<Timing> Timings = new List<Timing>();
 		private readonly static List<(Arc arc, bool done)> Arcs = new List<(Arc, bool)>();
-
-
+		private const float SCALE_Z = 0.2f;
 
 
 
@@ -170,14 +178,38 @@
 				});
 			}
 
+			// Arc Taps
+			for (int i = 0; i < Arcs.Count; i++) {
+				var arc = Arcs[i].arc;
+				if (arc.Arctap == null || arc.Arctap.Count == 0) { continue; }
+				for (int j = 0; j < arc.Arctap.Count; j++) {
+					float time = arc.Arctap[j] / 1000f;
+					data.Notes.Add(new Beatmap.Note() {
+						Time = time,
+						X = Util.Remap(arc.Time / 1000f, arc.TimeEnd / 1000f, arc.XStart, arc.XEnd, time),
+						Z = Util.Remap(arc.Time / 1000f, arc.TimeEnd / 1000f, arc.YStart, arc.YEnd, time) * SCALE_Z,
+						Width = 0.25f,
+						Tap = false,
+						ClickSoundIndex = 0,
+						Comment = "",
+						Duration = 0,
+						LinkedNoteIndex = -1,
+						SwipeX = 1,
+						SwipeY = 1,
+						TrackIndex = 4,
+					});
+				}
+			}
+
+
 			// Arc Map
 			var arcMap = new Dictionary<int, List<(Arc arc, int index)>>();
 			for (int i = 0; i < Arcs.Count; i++) {
 				var arc = Arcs[i];
-				if (!arcMap.ContainsKey(arc.arc.TimeStart)) {
-					arcMap.Add(arc.arc.TimeStart, new List<(Arc arc, int index)>());
+				if (!arcMap.ContainsKey(arc.arc.Time)) {
+					arcMap.Add(arc.arc.Time, new List<(Arc arc, int index)>());
 				}
-				arcMap[arc.arc.TimeStart].Add((arc.arc, i));
+				arcMap[arc.arc.Time].Add((arc.arc, i));
 			}
 			foreach (var pair in arcMap) {
 				pair.Value.Sort(new ArcIntComparer());
@@ -199,9 +231,9 @@
 				// Arc Head
 				data.Notes.Add(new Beatmap.Note() {
 					X = arc.XStart,
-					Time = arc.TimeStart / 1000f,
+					Time = arc.Time / 1000f,
 					Width = 0.05f,
-					Z = arc.YStart * 0.2f,
+					Z = arc.YStart * SCALE_Z,
 					ClickSoundIndex = 0,
 					Comment = skyline ? " " : "",
 					Duration = 0f,
@@ -220,7 +252,7 @@
 
 					// Find Closest in List
 					int NextIndex = -1;
-					Arc? nextArc = null;
+					Arc nextArc = null;
 					foreach (var (_arc, _i) in list) {
 						if (
 							!Arcs[_i].done &&
@@ -236,12 +268,15 @@
 					// Pass to next loop
 					if (NextIndex < 0) { break; }
 
+					skyline = nextArc.Skyline;
+					swipeY = (byte)(nextArc.Ease == "so" ? 2 : nextArc.Ease == "si" ? 0 : 1);
+
 					// End Current Arc
 					data.Notes.Add(new Beatmap.Note() {
 						X = x,
 						Time = time / 1000f,
 						Width = 0.05f,
-						Z = y * 0.2f,
+						Z = y * SCALE_Z,
 						ClickSoundIndex = 0,
 						Comment = skyline ? " " : "",
 						Duration = 0f,
@@ -253,10 +288,9 @@
 					});
 
 					Arcs[NextIndex] = (Arcs[NextIndex].arc, true);
-					time = nextArc.Value.TimeEnd;
-					x = nextArc.Value.XEnd;
-					y = nextArc.Value.YEnd;
-					swipeY = (byte)(nextArc.Value.Ease == "so" ? 2 : nextArc.Value.Ease == "si" ? 0 : 1);
+					time = nextArc.TimeEnd;
+					x = nextArc.XEnd;
+					y = nextArc.YEnd;
 
 				}
 
@@ -265,7 +299,7 @@
 					X = x,
 					Time = time / 1000f,
 					Width = 0.05f,
-					Z = y * 0.2f,
+					Z = y * SCALE_Z,
 					ClickSoundIndex = 0,
 					Comment = skyline ? " " : "",
 					Duration = 0f,
@@ -288,23 +322,114 @@
 			Notes.Clear();
 			Timings.Clear();
 			Arcs.Clear();
+			data.SortNotesByTime();
 			return data;
 		}
 
 
 
 		public static string Stager_To_Arcaea (Beatmap sMap) {
+
 			if (sMap == null) { return ""; }
+			sMap.SortNotesByTime();
 
+			// Map >> Data
+			Notes.Clear();
+			Timings.Clear();
+			Arcs.Clear();
 
+			var arcDoneHash = new HashSet<int>();
+			for (int i = 0; i < sMap.Notes.Count; i++) {
+				var note = sMap.Notes[i];
+				if (note.TrackIndex < 4) {
+					// Ground
+					Notes.Add(new Note() {
+						Time = note.m_Time,
+						Duration = note.m_Duration,
+						Lane = Mathf.Clamp(note.TrackIndex + 1, 1, 4),
+					});
+				} else if (note.LinkedNoteIndex >= 0 && note.LinkedNoteIndex < sMap.Notes.Count && !arcDoneHash.Contains(i)) {
+					// Arc
+					arcDoneHash.Add(i);
+					var linkedNote = sMap.Notes[note.LinkedNoteIndex];
+					Arcs.Add((new Arc() {
+						Time = note.m_Time,
+						TimeEnd = linkedNote.m_Time,
+						XStart = note.X,
+						XEnd = linkedNote.X,
+						YStart = note.Z / SCALE_Z,
+						YEnd = linkedNote.Z / SCALE_Z,
+						Skyline = !string.IsNullOrEmpty(note.Comment),
+						Fx = "none",
+						Ease = note.SwipeY == 0 ? "si" : note.SwipeY == 2 ? "so" : "s",
+						Color = 0,
+						Arctap = null,
+					}, false));
+					if (linkedNote.LinkedNoteIndex < 0) {
+						arcDoneHash.Add(note.LinkedNoteIndex);
+					}
+				}
+			}
 
+			// Arc Tap
+			for (int i = 0; i < sMap.Notes.Count; i++) {
+				var note = sMap.Notes[i];
+				if (!string.IsNullOrEmpty(note.Comment) || note.LinkedNoteIndex >= 0 || arcDoneHash.Contains(i)) { continue; }
+				Arc closestArc = null;
+				float distance = float.MaxValue;
+				var notePos = new Vector2(note.X, note.Z / SCALE_Z);
+				foreach (var (arc, _) in Arcs) {
+					if (!arc.Skyline || note.m_Time < arc.Time || note.m_Time > arc.TimeEnd) { continue; }
+					float dis = Vector2.Distance(notePos, new Vector2(
+						Util.Remap(arc.Time / 1000f, arc.TimeEnd / 1000f, arc.XStart, arc.XEnd, note.Time),
+						Util.Remap(arc.Time / 1000f, arc.TimeEnd / 1000f, arc.YStart, arc.YEnd, note.Time)
+					));
+					if (dis < 0.1f && dis < distance) {
+						distance = dis;
+						closestArc = arc;
+					}
+				}
+				if (closestArc != null) {
+					if (closestArc.Arctap == null) {
+						closestArc.Arctap = new List<int>();
+					}
+					closestArc.Arctap.Add(note.m_Time);
+				}
+			}
 
+			// Timing
+			foreach (var speed in sMap.SpeedNotes) {
+				if (speed.m_Time > 0) {
+					Timings.Add(new Timing() {
+						Time = speed.m_Time,
+						Beat = 4f,
+						BPM = speed.Speed * sMap.BPM,
+					});
+				}
+			}
 
+			// Data >> ItemList >> String
+			var items = new List<ArcaeaItem>();
+			foreach (var note in Notes) {
+				items.Add(note);
+			}
+			foreach (var timing in Timings) {
+				if (timing.Time > 0) {
+					items.Add(timing);
+				}
+			}
+			foreach (var arc in Arcs) {
+				arc.arc.XStart = (arc.arc.XStart - 1f / 4f) * 4f / 2f;
+				arc.arc.XEnd = (arc.arc.XEnd - 1f / 4f) * 4f / 2f;
+				items.Add(arc.arc);
+			}
+			Notes.Clear();
+			Timings.Clear();
+			Arcs.Clear();
+			items.Sort(new ArcaeaItemComparer());
+			return Data_To_ArcaeaString(items, sMap.BPM);
 
-
-			return "";
 		}
-
 
 
 
@@ -327,7 +452,7 @@
 			}
 
 			// String >> Data
-			var strs = aMap.Substring(audioOffsetLength, aMap.Length - audioOffsetLength).Replace("\r", "").Replace("-", "").Replace("\n", "").Split(';');
+			var strs = aMap.Substring(audioOffsetLength + 1, aMap.Length - audioOffsetLength - 1).Replace("\r", "").Replace("\n", "").Split(';');
 			if (strs == null || strs.Length == 0) { return false; }
 			for (int i = 0; i < strs.Length; i++) {
 
@@ -384,10 +509,10 @@
 								int.TryParse(values[7], out int _color) &&
 								bool.TryParse(values[9].ToLower(), out bool _skyLine)
 							) {
-								arc.TimeStart = _timeStart + timeOffset;
+								arc.Time = _timeStart + timeOffset;
 								arc.TimeEnd = _timeEnd + timeOffset;
-								arc.XStart = _xStart;
-								arc.XEnd = _xEnd;
+								arc.XStart = Mathf.LerpUnclamped(1f / 4f, 3f / 4f, _xStart);
+								arc.XEnd = Mathf.LerpUnclamped(1f / 4f, 3f / 4f, _xEnd);
 								arc.YStart = _yStart;
 								arc.YEnd = _yEnd;
 								arc.Color = _color;
@@ -436,6 +561,44 @@
 			return true;
 		}
 
+
+
+		private static string Data_To_ArcaeaString (List<ArcaeaItem> items, float bpm) {
+			var builder = new StringBuilder();
+			builder.AppendLine("AudioOffset:0");
+			builder.AppendLine("-");
+			builder.AppendLine($"timing(0,{bpm.ToString("0.00")},4.00);");
+			foreach (var item in items) {
+				switch (item) {
+					case Note nItem:
+						if (nItem.Duration == 0) {
+							builder.AppendLine($"({nItem.Time},{nItem.Lane});");
+						} else {
+							builder.AppendLine($"hold({nItem.Time},{nItem.Time + nItem.Duration},{nItem.Lane});");
+						}
+						break;
+					case Timing tItem:
+						builder.AppendLine($"timing({tItem.Time},{tItem.BPM.ToString("0.00")},{tItem.Beat.ToString("0.00")});");
+						break;
+					case Arc aItem:
+						var strArc = $"arc({aItem.Time},{aItem.TimeEnd},{aItem.XStart.ToString("0.00")},{aItem.XEnd.ToString("0.00")},{aItem.Ease},{aItem.YStart.ToString("0.00")},{aItem.YEnd.ToString("0.00")},{aItem.Color},{aItem.Fx},{aItem.Skyline})";
+						if (aItem.Arctap == null || aItem.Arctap.Count == 0) {
+							builder.AppendLine($"{strArc};");
+						} else {
+							var strArctap = new StringBuilder();
+							for (int _i = 0; _i < aItem.Arctap.Count; _i++) {
+								strArctap.Append($"arctap({aItem.Arctap[_i]})");
+								if (_i < aItem.Arctap.Count - 1) {
+									strArctap.Append(',');
+								}
+							}
+							builder.AppendLine($"{strArc}[{strArctap.ToString()}];");
+						}
+						break;
+				}
+			}
+			return builder.ToString();
+		}
 
 
 
