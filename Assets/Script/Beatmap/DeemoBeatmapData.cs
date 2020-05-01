@@ -39,6 +39,13 @@
 		}
 
 
+		public enum NoteType {
+			Normal = 0,
+			Mute = 1,
+			Slide = 2,
+		}
+
+
 		#endregion
 
 
@@ -78,12 +85,11 @@
 			var data = new Beatmap {
 				BPM = 120,
 				Shift = 0f,
-				DropSpeed = dMap.speed / 10f,
 				Level = 1,
 				Ratio = 1.5f,
 				Tag = "Normal",
-				CreatedTime = Util.GetLongTime(),
-				SpeedNotes = new List<Beatmap.SpeedNote>(),
+				CreatedTime = System.DateTime.Now.Ticks,
+				Timings = new List<Beatmap.Timing>(),
 				Stages = new List<Beatmap.Stage> {
 					new Beatmap.Stage() { // Bottom
 						Duration = float.MaxValue,
@@ -140,12 +146,10 @@
 						Time = dNote._time,
 						X = Util.Remap(-2f, 2f, 0f, 1f, dNote.pos),
 						Width = dNote.size / 5f,
-						Tap = true,
+						ItemType = dNote.sounds == null || dNote.sounds.Length == 0 ? (int)NoteType.Mute : (int)NoteType.Normal,
 						LinkedNoteIndex = -1,
 						Duration = 0f,
 						ClickSoundIndex = (short)(dNote.sounds == null || dNote.sounds.Length == 0 ? -1 : 0),
-						SwipeX = 1,
-						SwipeY = 1,
 						TrackIndex = 0,
 					};
 				}
@@ -160,7 +164,7 @@
 						int realID = realIDs[refID];
 						if (realID < 0 || realID >= noteCount) { continue; }
 						// Slide
-						data.Notes[realID].Tap = false;
+						data.Notes[realID].ItemType = (int)NoteType.Slide;
 						// Link to Next
 						if (j < dLink.notes.Length - 1) {
 							data.Notes[realID].LinkedNoteIndex = realIDs[dLink.notes[j + 1].__ref];
@@ -179,7 +183,7 @@
 			sMap.SortNotesByTime();
 			int noteCount = sMap.Notes.Count;
 			var dMap = new DeemoBeatmapData() {
-				speed = sMap.DropSpeed * 10f,
+				speed = 1f,
 				notes = new NoteData[noteCount],
 			};
 			// Notes
@@ -221,7 +225,7 @@
 					_time = sNote.Time,
 					pos = Util.Remap(0f, 1f, -2f, 2f, sNote.X),
 					size = sNote.Width * 5f,
-					sounds = sNote.ClickSoundIndex >= 0 ? new NoteData.SoundData[1] { new NoteData.SoundData() { d = 0f, p = 0, v = 0, } } : null,
+					sounds = sNote.ItemType == (int)NoteType.Normal ? new NoteData.SoundData[1] { new NoteData.SoundData() { d = 0f, p = 0, v = 0, } } : null,
 				};
 			}
 			// Links

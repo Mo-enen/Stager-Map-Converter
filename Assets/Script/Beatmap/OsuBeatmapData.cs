@@ -130,34 +130,34 @@
 				// Hits >> Stager
 				data = new Beatmap() {
 					BPM = 120,
-					DropSpeed = 1f,
 					Level = 1,
-					Ratio = 1.5f,//0.25f * columnCount / 3f,
+					Ratio = 1.5f,
 					Shift = 0f,
-					Tag = "Normal",
+					Tag = "OSU",
+					CreatedTime = System.DateTime.Now.Ticks,
 					Notes = new List<Beatmap.Note>(),
-					SpeedNotes = new List<Beatmap.SpeedNote>(),
+					Timings = new List<Beatmap.Timing>(),
 					Stages = new List<Beatmap.Stage>() { new Beatmap.Stage(){
-					Duration = float.MaxValue,
-					Height = 0.6666f,
-					Rotation = 0f,
-					Speed = 1f,
-					Time = 0f,
-					Width = 1f,
-					X = 0.5f,
-					Y = 0f,
-					Positions = { },
-					Heights = { },
-					Rotations = { },
-					Widths = { },
-				}},
+						Duration = float.MaxValue,
+						Height = 0.6666f,
+						Rotation = 0f,
+						Speed = 1f,
+						Time = 0f,
+						Width = columnCount * 0.0625f,
+						X = 0.5f,
+						Y = 0f,
+						Positions = { },
+						Heights = { },
+						Rotations = { },
+						Widths = { },
+					}},
 					Tracks = new List<Beatmap.Track>(),
 				};
 				// Tracks
 				for (int i = 0; i < columnCount; i++) {
 					data.Tracks.Add(new Beatmap.Track() {
-						Width = 0.0625f,
-						X = Mathf.Lerp(0.5f - (columnCount - 1f) / 32f, 0.5f + (columnCount - 1f) / 32f, i / (columnCount - 1f)),
+						Width = 1f / columnCount,
+						X = Util.Remap(0, columnCount - 1, 0.5f / columnCount, 1f - 0.5f / columnCount, i),
 						Time = 0f,
 						Duration = float.MaxValue,
 						StageIndex = 0,
@@ -182,11 +182,9 @@
 						ClickSoundIndex = 0,
 						Duration = !hit.Hold ? 0f : Mathf.Max((hit.EndTime - hit.Time) / 1000f, 0f),
 						LinkedNoteIndex = -1,
-						SwipeX = 1,
-						SwipeY = 1,
-						Tap = true,
 						Time = hit.Time / 1000f,
 						Width = 1f,
+						ItemType = 0,
 					});
 				}
 				Hits.Clear();
@@ -230,7 +228,7 @@
 					var (time, speed) = speedList[i];
 					currentSpeed *= speed;
 					if (i == 0 || time != speedList[i - 1].time) {
-						data.SpeedNotes.Add(new Beatmap.SpeedNote(time / 1000f, currentSpeed));
+						data.Timings.Add(new Beatmap.Timing(time / 1000f, currentSpeed));
 						currentSpeed = 1f;
 					}
 				}
@@ -269,8 +267,8 @@
 					Time = 0,
 					BeatLength = BPM_to_BL(map.BPM),
 				});
-				if (map.SpeedNotes != null) {
-					foreach (var note in map.SpeedNotes) {
+				if (map.Timings != null) {
+					foreach (var note in map.Timings) {
 						Timings.Add(new TimingObject() {
 							Time = Mathf.RoundToInt(note.Time * 1000f),
 							BeatLength = note.Speed * -100f,
@@ -327,7 +325,7 @@
 		private static float BL_to_BPM (float bl) => 1f / bl * 1000f * 60f;
 
 
-		private static float BPM_to_BL (int bpm) => 1000f * 60f / bpm;
+		private static float BPM_to_BL (float bpm) => 1000f * 60f / bpm;
 
 
 

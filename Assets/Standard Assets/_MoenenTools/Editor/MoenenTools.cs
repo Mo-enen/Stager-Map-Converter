@@ -10,7 +10,7 @@
 
 
 		// & alt   % ctrl   # Shift
-		[MenuItem("Tools/Clear Console And ApplyPrefabs #&x")]
+		[MenuItem("Tools/Clear Console And ApplyPrefabs _F5")]
 		public static void ClearAndReStage () {
 			// Clear Console
 			var assembly = Assembly.GetAssembly(typeof(UnityEditor.ActiveEditorTracker));

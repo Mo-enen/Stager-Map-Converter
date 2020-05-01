@@ -319,19 +319,19 @@
 			int successCount = 0;
 			string errorMsg = "";
 			foreach (var path in paths) {
-				//try {
-				var aMap = Util.FileToText(path);
-				var sMap = ArcaeaBeatmapData.Arcaea_To_Stager(aMap);
-				if (sMap is null) { continue; }
-				var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Arcaea_to_Stager");
-				Util.CreateFolder(rootPath);
-				// Map
-				Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
-				// Final
-				successCount++;
-				//} catch (System.Exception ex) {
-				//	errorMsg = ex.Message;
-				//}
+				try {
+					var aMap = Util.FileToText(path);
+					var sMap = ArcaeaBeatmapData.Arcaea_To_Stager(aMap);
+					if (sMap is null) { continue; }
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Arcaea_to_Stager");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
+					// Final
+					successCount++;
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
 			}
 			// Hint
 			if (successCount > 0) {
@@ -363,6 +363,173 @@
 			}
 			if (successCount > 0) {
 				ShowHint("Success! Arcaea files created next to the original file.", true);
+			} else {
+				ShowHint("Fail!\n" + errorMsg, false);
+			}
+		}
+
+
+		// BMS
+		public void UI_BMS_To_Stager () {
+			var paths = DialogUtil.PickFilesDialog("Pick BMS Map files", "BMS File", "bms", "bme", "bml", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			string errorMsg = "";
+			foreach (var path in paths) {
+				try {
+					var sMap = BmsBeatmapData.Bms_To_Stager(Util.FileToText(path));
+					if (sMap is null) { continue; }
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "BMS_to_Stager");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
+					// Final
+					successCount++;
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
+			}
+			// Hint
+			if (successCount > 0) {
+				ShowHint("Success! Stager beatmaps created next to the original file.", true);
+			} else {
+				ShowHint("Fail!\n" + errorMsg, false);
+			}
+		}
+
+
+		public void UI_Stager_To_BMS () {
+			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			string errorMsg = "";
+			foreach (var path in paths) {
+				try {
+					var sMap = JsonUtility.FromJson<Beatmap>(Util.FileToText(path));
+					var bMap = BmsBeatmapData.Stager_To_Bms(sMap, Util.GetNameWithoutExtension(path));
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Stager_to_BMS");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(bMap, Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".bms"));
+					successCount++;
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
+			}
+			if (successCount > 0) {
+				ShowHint("Success! BMS files created next to the original file.", true);
+			} else {
+				ShowHint("Fail!\n" + errorMsg, false);
+			}
+		}
+
+
+		// KSH
+		public void UI_KSM_To_Stager () {
+			var paths = DialogUtil.PickFilesDialog("Pick KSM Map files", "KSM File", "ksh", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			string errorMsg = "";
+			foreach (var path in paths) {
+				try {
+					var sMap = KsmBeatmapData.KSM_to_Stager(Util.FileToText(path));
+					if (sMap is null) { continue; }
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "KShootMania_to_Stager");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
+					// Final
+					successCount++;
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
+			}
+			// Hint
+			if (successCount > 0) {
+				ShowHint("Success! Stager beatmaps created next to the original file.", true);
+			} else {
+				ShowHint("Fail!\n" + errorMsg, false);
+			}
+		}
+
+
+		public void UI_Stager_To_KSM () {
+			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			string errorMsg = "";
+			foreach (var path in paths) {
+				try {
+					var sMap = JsonUtility.FromJson<Beatmap>(Util.FileToText(path));
+					var kMap = KsmBeatmapData.Stager_to_KSM(sMap, Util.GetNameWithoutExtension(path));
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Stager_to_KShootMania");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(kMap, Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".bms"));
+					successCount++;
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
+			}
+			if (successCount > 0) {
+				ShowHint("Success! KSM files created next to the original file.", true);
+			} else {
+				ShowHint("Fail!\n" + errorMsg, false);
+			}
+		}
+
+
+		// Phigros
+		public void UI_Phigros_To_Stager () {
+			var paths = DialogUtil.PickFilesDialog("Pick Phigros Map files", "Phigros Json", "json", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			string errorMsg = "";
+			foreach (var path in paths) {
+				try {
+					var json = Util.FileToText(path).Replace("$", "__");
+					var pMap = JsonUtility.FromJson<PhigrosBeatmapData>(json);
+					if (pMap is null) { continue; }
+					var sMap = PhigrosBeatmapData.Phigros_to_Stager(pMap);
+					if (sMap is null) { continue; }
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Phigros_to_Stager");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(JsonUtility.ToJson(sMap, false), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".json"));
+					// Final
+					successCount++;
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
+			}
+			if (successCount > 0) {
+				ShowHint("Success! Stager beatmaps created next to the original file.", true);
+			} else {
+				ShowHint("Fail!\n" + errorMsg, false);
+			}
+		}
+
+
+		public void UI_Stager_To_Phigros () {
+			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
+			if (paths is null || paths.Length == 0) { return; }
+			int successCount = 0;
+			string errorMsg = "";
+			foreach (var path in paths) {
+				try {
+					var sMap = JsonUtility.FromJson<Beatmap>(Util.FileToText(path));
+					var pMap = PhigrosBeatmapData.Stager_to_Phigros(sMap);
+					var rootPath = Util.CombinePaths(Util.GetParentPath(path), "Stager_to_Phigros");
+					Util.CreateFolder(rootPath);
+					// Map
+					Util.TextToFile(JsonUtility.ToJson(pMap, false).Replace("__", "$"), Util.CombinePaths(rootPath, Util.GetNameWithoutExtension(path) + ".txt"));
+					successCount++;
+				} catch (System.Exception ex) {
+					errorMsg = ex.Message;
+				}
+			}
+			if (successCount > 0) {
+				ShowHint("Success! Phigros JSON files created next to the original file.", true);
 			} else {
 				ShowHint("Fail!\n" + errorMsg, false);
 			}

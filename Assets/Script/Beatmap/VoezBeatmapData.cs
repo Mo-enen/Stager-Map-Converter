@@ -115,12 +115,11 @@
 			var data = new Beatmap {
 				BPM = 120,
 				Shift = 0f,
-				DropSpeed = 1f,
 				Level = 1,
 				Ratio = 1.5f,
 				Tag = "Normal",
-				CreatedTime = Util.GetLongTime(),
-				SpeedNotes = new List<Beatmap.SpeedNote>(),
+				CreatedTime = System.DateTime.Now.Ticks,
+				Timings = new List<Beatmap.Timing>(),
 				Stages = new List<Beatmap.Stage> {
 					new Beatmap.Stage() { // Bottom
 						Duration = float.MaxValue,
@@ -149,13 +148,11 @@
 					TrackIndex = vNote.Track,
 					Time = vNote.Time,
 					Duration = type == NoteType.Hold ? vNote.Hold : 0f,
-					Tap = type != NoteType.Slide,
-					SwipeX = (byte)(type == NoteType.SwipeLeft ? 0 : type == NoteType.SwipeRight ? 2 : 1),
 					X = 0.5f,
 					Width = 1f,
 					LinkedNoteIndex = -1,
 					ClickSoundIndex = 0,
-					SwipeY = 1,
+					ItemType = (int)type,
 				});
 			}
 
@@ -451,16 +448,18 @@
 
 
 		private static NoteType GetNoteType (Beatmap.Note note) {
-			if (note.Duration > 0.001f) {
-				return NoteType.Hold;
-			} else if (!note.Tap) {
-				return NoteType.Slide;
-			} else if (note.SwipeX == 1) {
-				return NoteType.Tap;
-			} else if (note.SwipeX == 0) {
-				return NoteType.SwipeLeft;
-			} else {
-				return NoteType.SwipeRight;
+			switch (note.ItemType) {
+				default:
+				case 0:
+					return NoteType.Tap;
+				case 1:
+					return NoteType.Hold;
+				case 2:
+					return NoteType.Slide;
+				case 3:
+					return NoteType.SwipeLeft;
+				case 4:
+					return NoteType.SwipeRight;
 			}
 		}
 

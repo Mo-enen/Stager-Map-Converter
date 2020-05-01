@@ -75,12 +75,11 @@
 			var data = new Beatmap {
 				BPM = (int)Mathf.Max(dMap.m_barPerMin * 4, 1),
 				Shift = dMap.m_timeOffset,
-				DropSpeed = 1f,
 				Level = 1,
 				Ratio = 1.5f,
 				Tag = "Normal",
-				CreatedTime = Util.GetLongTime(),
-				SpeedNotes = new List<Beatmap.SpeedNote>(),
+				CreatedTime = System.DateTime.Now.Ticks,
+				Timings = new List<Beatmap.Timing>(),
 				Stages = new List<Beatmap.Stage> {
 					new Beatmap.Stage() { // Bottom
 						Duration = float.MaxValue,
@@ -199,7 +198,7 @@
 				float w = note.Width * (note.TrackIndex == 0 ? 5.6f : 6.5f);
 				float noteX = note.TrackIndex == 2 ? 1f - note.X : note.X;
 				float pos = (note.TrackIndex == 0 ? (noteX * 5.6f - 0.3f) : noteX * 6f) - w * 0.5f;
-				NoteType noteType = note.Duration > 0.001f ? NoteType.Hold : note.Tap ? NoteType.Tap : NoteType.Slide;
+				var noteType = (NoteType)note.ItemType;
 				notes.m_notes.Add(new Notes.CMapNoteAsset() {
 					m_id = notes.m_notes.Count,
 					m_subId = noteType == NoteType.Hold ? notes.m_notes.Count + 1 : -1,
@@ -244,11 +243,9 @@
 						Width = w,
 						X = reverseX ? 1f - x : x,
 						Duration = note.m_type == "HOLD" ? (note.m_subId >= 0 && note.m_subId < source.m_notes.Count ? source.m_notes[note.m_subId].m_time - note.m_time : 0) : 0f,
-						Tap = GetNoteTypeFromDynamix(note.m_type) != NoteType.Slide,
+						ItemType = (int)GetNoteTypeFromDynamix(note.m_type),
 						LinkedNoteIndex = -1,
 						ClickSoundIndex = 0,
-						SwipeX = 1,
-						SwipeY = 1,
 					});
 				}
 			}

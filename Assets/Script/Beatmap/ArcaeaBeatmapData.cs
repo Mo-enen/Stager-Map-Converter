@@ -45,10 +45,20 @@
 			public string Ease;
 			public float YStart;
 			public float YEnd;
-			public int Color;
+			public int Color; // 0:Blue   1:Pink
 			public string Fx;
 			public bool Skyline;
 			public List<int> Arctap;
+		}
+
+
+		public enum NoteType {
+			Tap = 0,
+			Hold = 1,
+			ArcBlue = 2,
+			ArcPink = 3,
+			ArcTap = 4,
+			Skyline = 5,
 		}
 
 
@@ -67,19 +77,33 @@
 			// Data >> map
 			var data = new Beatmap() {
 				BPM = Timings.Count > 0 ? (int)Timings[0].BPM : 120,
-				DropSpeed = 1f,
 				Level = 1,
 				Ratio = 1.5f,
 				Shift = 0f,
 				Tag = "Normal",
+				CreatedTime = System.DateTime.Now.Ticks,
 				Stages = {
 					new Beatmap.Stage(){
 						X = 0.5f,
 						Y = 0f,
 						Duration = float.MaxValue,
-						Height = 1f,
+						Height = 1.8f,
 						Rotation = 0f,
-						Speed = 1f,
+						Speed = 0.6f,
+						Time = 0f,
+						Width = 0.618f,
+						Widths = { },
+						Heights = { },
+						Positions = { },
+						Rotations = { },
+					},
+					new Beatmap.Stage(){
+						X = 0.5f,
+						Y = 0f,
+						Duration = float.MaxValue,
+						Height = 1.8f,
+						Rotation = 0f,
+						Speed = 0.6f,
 						Time = 0f,
 						Width = 0.618f,
 						Widths = { },
@@ -146,7 +170,7 @@
 						X = 0.5f,
 						Width = 1f,
 						Angle = 45f,
-						StageIndex = 0,
+						StageIndex = 1,
 						Time = 0f,
 						Duration = float.MaxValue,
 						Color = 1,
@@ -157,7 +181,7 @@
 						Widths = { },},
 				},
 				Notes = { },
-				SpeedNotes = { },
+				Timings = { },
 			};
 
 			// Notes
@@ -171,9 +195,7 @@
 					Z = 0f,
 					ClickSoundIndex = 0,
 					LinkedNoteIndex = -1,
-					SwipeX = 1,
-					SwipeY = 1,
-					Tap = true,
+					ItemType = note.Duration == 0 ? (int)NoteType.Tap : (int)NoteType.Hold,
 					Width = 1f,
 				});
 			}
@@ -189,13 +211,10 @@
 						X = Util.Remap(arc.Time / 1000f, arc.TimeEnd / 1000f, arc.XStart, arc.XEnd, time),
 						Z = Util.Remap(arc.Time / 1000f, arc.TimeEnd / 1000f, arc.YStart, arc.YEnd, time) * SCALE_Z,
 						Width = 0.25f,
-						Tap = false,
+						ItemType = (int)NoteType.ArcTap,
 						ClickSoundIndex = 0,
-						Comment = "",
 						Duration = 0,
 						LinkedNoteIndex = -1,
-						SwipeX = 1,
-						SwipeY = 1,
 						TrackIndex = 4,
 					});
 				}
@@ -226,7 +245,7 @@
 				float x = arc.XEnd;
 				float y = arc.YEnd;
 				bool skyline = arc.Skyline;
-				byte swipeY = (byte)(arc.Ease == "so" ? 2 : arc.Ease == "si" ? 0 : 1);
+				int color = arc.Color;
 
 				// Arc Head
 				data.Notes.Add(new Beatmap.Note() {
@@ -235,12 +254,9 @@
 					Width = 0.05f,
 					Z = arc.YStart * SCALE_Z,
 					ClickSoundIndex = 0,
-					Comment = skyline ? " " : "",
+					ItemType = skyline ? (int)NoteType.Skyline : color == 0 ? (int)NoteType.ArcBlue : (int)NoteType.ArcPink,
 					Duration = 0f,
 					LinkedNoteIndex = data.Notes.Count + 1,
-					SwipeX = 1,
-					SwipeY = swipeY,
-					Tap = true,
 					TrackIndex = 4,
 				});
 				Arcs[i] = (arc, true);
@@ -269,7 +285,7 @@
 					if (NextIndex < 0) { break; }
 
 					skyline = nextArc.Skyline;
-					swipeY = (byte)(nextArc.Ease == "so" ? 2 : nextArc.Ease == "si" ? 0 : 1);
+					color = nextArc.Color;
 
 					// End Current Arc
 					data.Notes.Add(new Beatmap.Note() {
@@ -278,12 +294,9 @@
 						Width = 0.05f,
 						Z = y * SCALE_Z,
 						ClickSoundIndex = 0,
-						Comment = skyline ? " " : "",
+						ItemType = skyline ? (int)NoteType.Skyline : color == 0 ? (int)NoteType.ArcBlue : (int)NoteType.ArcPink,
 						Duration = 0f,
 						LinkedNoteIndex = data.Notes.Count + 1,
-						SwipeX = 1,
-						SwipeY = swipeY,
-						Tap = false,
 						TrackIndex = 4,
 					});
 
@@ -301,12 +314,9 @@
 					Width = 0.05f,
 					Z = y * SCALE_Z,
 					ClickSoundIndex = 0,
-					Comment = skyline ? " " : "",
+					ItemType = skyline ? (int)NoteType.Skyline : color == 0 ? (int)NoteType.ArcBlue : (int)NoteType.ArcPink,
 					Duration = 0f,
 					LinkedNoteIndex = -1,
-					SwipeX = 1,
-					SwipeY = 1,
-					Tap = false,
 					TrackIndex = 4,
 				});
 
@@ -315,7 +325,7 @@
 			// Speeds
 			for (int i = 0; i < Timings.Count; i++) {
 				var timing = Timings[i];
-				data.SpeedNotes.Add(new Beatmap.SpeedNote(timing.Time / 1000f, timing.BPM / data.BPM));
+				data.Timings.Add(new Beatmap.Timing(timing.Time / 1000f, timing.BPM / data.BPM));
 			}
 
 			// Final
@@ -349,7 +359,7 @@
 						Lane = Mathf.Clamp(note.TrackIndex + 1, 1, 4),
 					});
 				} else if (note.LinkedNoteIndex >= 0 && note.LinkedNoteIndex < sMap.Notes.Count && !arcDoneHash.Contains(i)) {
-					// Arc
+					// Arc Tap
 					arcDoneHash.Add(i);
 					var linkedNote = sMap.Notes[note.LinkedNoteIndex];
 					Arcs.Add((new Arc() {
@@ -359,9 +369,9 @@
 						XEnd = linkedNote.X,
 						YStart = note.Z / SCALE_Z,
 						YEnd = linkedNote.Z / SCALE_Z,
-						Skyline = !string.IsNullOrEmpty(note.Comment),
+						Skyline = note.ItemType == (int)NoteType.Skyline,
 						Fx = "none",
-						Ease = note.SwipeY == 0 ? "si" : note.SwipeY == 2 ? "so" : "s",
+						Ease = "s",
 						Color = 0,
 						Arctap = null,
 					}, false));
@@ -374,7 +384,7 @@
 			// Arc Tap
 			for (int i = 0; i < sMap.Notes.Count; i++) {
 				var note = sMap.Notes[i];
-				if (!string.IsNullOrEmpty(note.Comment) || note.LinkedNoteIndex >= 0 || arcDoneHash.Contains(i)) { continue; }
+				if (note.ItemType != (int)NoteType.ArcTap || note.LinkedNoteIndex >= 0 || arcDoneHash.Contains(i)) { continue; }
 				Arc closestArc = null;
 				float distance = float.MaxValue;
 				var notePos = new Vector2(note.X, note.Z / SCALE_Z);
@@ -398,7 +408,7 @@
 			}
 
 			// Timing
-			foreach (var speed in sMap.SpeedNotes) {
+			foreach (var speed in sMap.Timings) {
 				if (speed.m_Time > 0) {
 					Timings.Add(new Timing() {
 						Time = speed.m_Time,
