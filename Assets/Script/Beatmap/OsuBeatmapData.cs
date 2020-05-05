@@ -242,6 +242,7 @@
 
 		public static string Stager_to_Osu (Beatmap map, string name) {
 			if (map == null || map.Tracks == null || map.Notes == null || map.Notes.Count == 0) { return ""; }
+			map.SortNotesByTime();
 			// Get Hits
 			{
 				Hits.Clear();

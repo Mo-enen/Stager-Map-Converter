@@ -687,6 +687,8 @@
 
 		public static string Stager_to_KSM (Beatmap sMap, string title) {
 
+			sMap.SortNotesByTime();
+
 			// Stager >> Charts
 			float lastNoteTime = 0f;
 			foreach (var note in sMap.Notes) {

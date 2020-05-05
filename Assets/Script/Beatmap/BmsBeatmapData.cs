@@ -351,6 +351,7 @@
 		public static string Stager_To_Bms (Beatmap sMap, string title) {
 
 			if (sMap == null || sMap.Notes == null || sMap.Notes.Count == 0) { return ""; }
+			sMap.SortNotesByTime();
 
 			float maxNoteTime = 0f;
 			foreach (var note in sMap.Notes) {
