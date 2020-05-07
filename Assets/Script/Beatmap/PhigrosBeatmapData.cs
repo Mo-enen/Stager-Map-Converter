@@ -73,8 +73,7 @@
 		public JudgelineData[] judgeLineList = { };
 
 
-
-
+		// API
 		public static Beatmap Phigros_to_Stager (PhigrosBeatmapData pMap) {
 			if (pMap == null || pMap.judgeLineList == null || pMap.judgeLineList.Length == 0) { return null; }
 			var sMap = new Beatmap() {
@@ -92,9 +91,22 @@
 			for (int index = 0; index < pMap.judgeLineList.Length; index++) {
 				var jLine = pMap.judgeLineList[index];
 				// Stages
+				float time = -1f;
+				float duration = -1f;
+				foreach (var d in jLine.judgeLineDisappearEvents) {
+					if (Mathf.Max(d.startTime, 0) >= d.endTime) { continue; }
+					if (d.start == 1) {
+						// Time
+						if (time < -0.5f) {
+							time = GetRealTime(d.startTime);
+						}
+						// Duration
+						duration = Mathf.Max(GetRealTime(d.endTime) - time, duration);
+					}
+				}
 				sMap.Stages.Add(new Beatmap.Stage() {
-					m_Time = 0,
-					m_Duration = int.MaxValue,
+					Time = time,
+					Duration = duration > 0f ? duration : float.MaxValue,
 					Height = 520f / 880f,
 					ItemType = 0,
 					Rotation = 0f,
@@ -103,9 +115,9 @@
 					X = 0f,
 					Y = 0f,
 					Color = 0,
-					Positions = GetStagePositions(jLine.judgeLineMoveEvents),
-					Rotations = GetStageRotations(jLine.judgeLineRotateEvents),
-					Colors = GetStageColors(jLine.judgeLineDisappearEvents),
+					Positions = GetStagePositions(jLine.judgeLineMoveEvents, -time),
+					Rotations = GetStageRotations(jLine.judgeLineRotateEvents, -time),
+					Colors = GetStageColors(jLine.judgeLineDisappearEvents, -time),
 					Widths = { },
 					Heights = { },
 				});
@@ -114,8 +126,8 @@
 					StageIndex = index,
 					Angle = 0f,
 					X = 0.5f,
-					Time = 0f,
-					m_Duration = int.MaxValue,
+					Time = time,
+					Duration = duration > 0f ? duration : float.MaxValue,
 					Color = 0,
 					HasTray = false,
 					ItemType = 0,
@@ -129,8 +141,8 @@
 					StageIndex = index,
 					Angle = 180f,
 					X = 0.5f,
-					Time = 0f,
-					m_Duration = int.MaxValue,
+					Time = time,
+					Duration = duration > 0f ? duration : float.MaxValue,
 					Color = 0,
 					HasTray = false,
 					ItemType = 0,
@@ -144,9 +156,9 @@
 				foreach (var note in jLine.notesAbove) {
 					sMap.Notes.Add(new Beatmap.Note() {
 						TrackIndex = index * 2,
-						Time = note.time / 100f,
+						Time = GetRealTime(note.time),
 						X = Util.Remap(-10f, 10f, 0f, 1f, note.positionX),
-						Duration = note.type == (int)NoteType.Hold ? note.holdTime / 100f : 0f,
+						Duration = note.type == (int)NoteType.Hold ? GetRealTime(note.holdTime) : 0f,
 						ClickSoundIndex = 0,
 						ItemType = note.type - 1,
 						LinkedNoteIndex = -1,
@@ -160,9 +172,9 @@
 				foreach (var note in jLine.notesBelow) {
 					sMap.Notes.Add(new Beatmap.Note() {
 						TrackIndex = index * 2 + 1,
-						Time = note.time / 100f,
+						Time = GetRealTime(note.time),
 						X = Util.Remap(-10f, 10f, 0f, 1f, note.positionX),
-						Duration = note.type == (int)NoteType.Hold ? note.holdTime / 100f : 0f,
+						Duration = note.type == (int)NoteType.Hold ? GetRealTime(note.holdTime) : 0f,
 						ClickSoundIndex = 0,
 						ItemType = note.type - 1,
 						LinkedNoteIndex = -1,
@@ -231,9 +243,9 @@
 					numOfNotesBelow = noteBelow.Count,
 					notesAbove = noteAbove.ToArray(),
 					notesBelow = noteBelow.ToArray(),
-					judgeLineDisappearEvents = GetDisappears(stage.Colors, maxNoteTime),
-					judgeLineMoveEvents = GetMoves(stage.Positions, maxNoteTime),
-					judgeLineRotateEvents = GetRotations(stage.Rotations, maxNoteTime),
+					judgeLineDisappearEvents = GetDisappears(stage.Colors, maxNoteTime, stage.Time),
+					judgeLineMoveEvents = GetMoves(stage.Positions, maxNoteTime, stage.Time),
+					judgeLineRotateEvents = GetRotations(stage.Rotations, maxNoteTime, stage.Time),
 					speedEvents = new SpeedEvent[1] {
 						new SpeedEvent(){
 							startTime = -1,
@@ -247,82 +259,57 @@
 		}
 
 
-
-
 		// LGC
-		private static List<Beatmap.TimeFloatFloatTween> GetStagePositions (JudgeLineEvent[] moves) {
+		private static List<Beatmap.TimeFloatFloatTween> GetStagePositions (JudgeLineEvent[] moves, float timeOffset) {
 			var result = new List<Beatmap.TimeFloatFloatTween>();
 			if (moves == null || moves.Length == 0) { return result; }
 			for (int i = 0; i < moves.Length; i++) {
 				var m = moves[i];
 				result.Add(new Beatmap.TimeFloatFloatTween() {
-					Time = Mathf.Max(m.startTime / 100f, 0f),
+					Time = Mathf.Max(GetRealTime(m.startTime), 0f) + timeOffset,
 					A = Util.Remap(0f, 880f, 0f, 1f, m.start / 1000),
 					B = Util.Remap(0f, 520f, 0f, 520f / 880f, m.start % 1000),
 					Tween = 0,
 				});
-				if (i < moves.Length - 1) {
-					var next = moves[i + 1];
-					if (m.end != next.start && m.startTime < m.endTime - 1) {
-						result.Add(new Beatmap.TimeFloatFloatTween() {
-							Time = Mathf.Max((m.endTime - 1) / 100f, 0f),
-							A = Util.Remap(0f, 880f, 0f, 1f, m.end / 1000),
-							B = Util.Remap(0f, 520f, 0f, 1f, m.end % 1000),
-							Tween = 0,
-						});
-					}
-				} else if (i == moves.Length - 1) {
-					result.Add(new Beatmap.TimeFloatFloatTween() {
-						Time = Mathf.Max((m.endTime - 1) / 100f, 0f),
-						A = Util.Remap(0f, 880f, 0f, 1f, m.end / 1000),
-						B = Util.Remap(0f, 520f, 0f, 1f, m.end % 1000),
-						Tween = 0,
-					});
-				}
+				result.Add(new Beatmap.TimeFloatFloatTween() {
+					Time = Mathf.Max(GetRealTime(m.endTime), 0f) + timeOffset - 0.00001f,
+					A = Util.Remap(0f, 880f, 0f, 1f, m.end / 1000),
+					B = Util.Remap(0f, 520f, 0f, 520f / 880f, m.end % 1000),
+					Tween = 0,
+				});
 			}
 			return result;
 		}
-		private static List<Beatmap.TimeFloatTween> GetStageRotations (JudgeLineEvent[] rots) {
+		private static List<Beatmap.TimeFloatTween> GetStageRotations (JudgeLineEvent[] rots, float timeOffset) {
 			var result = new List<Beatmap.TimeFloatTween>();
 			if (rots == null || rots.Length == 0) { return result; }
 			for (int i = 0; i < rots.Length; i++) {
 				var r = rots[i];
 				result.Add(new Beatmap.TimeFloatTween() {
-					Time = Mathf.Max(r.startTime / 100f, 0f),
+					Time = Mathf.Max(GetRealTime(r.startTime), 0f) + timeOffset,
 					Value = r.start,
 					Tween = 0,
 				});
-				if (i < rots.Length - 1) {
-					var next = rots[i + 1];
-					if (r.end != next.start && r.startTime < r.endTime - 1) {
-						result.Add(new Beatmap.TimeFloatTween() {
-							Time = Mathf.Max((r.endTime - 1) / 100f, 0f),
-							Value = r.end,
-							Tween = 0,
-						});
-					}
-				} else if (i == rots.Length - 1) {
-					result.Add(new Beatmap.TimeFloatTween() {
-						Time = Mathf.Max((r.endTime - 1) / 100f, 0f),
-						Value = r.end,
-						Tween = 0,
-					});
-				}
+				result.Add(new Beatmap.TimeFloatTween() {
+					Time = Mathf.Max(GetRealTime(r.endTime), 0f) + timeOffset - 0.00001f,
+					Value = r.end,
+					Tween = 0,
+				});
 			}
 			return result;
 		}
-		private static List<Beatmap.TimeIntTween> GetStageColors (JudgeLineEvent[] dis) {
+		private static List<Beatmap.TimeIntTween> GetStageColors (JudgeLineEvent[] dis, float timeOffset) {
 			var result = new List<Beatmap.TimeIntTween>();
 			if (dis == null || dis.Length == 0) { return result; }
 			for (int i = 0; i < dis.Length; i++) {
 				var d = dis[i];
 				result.Add(new Beatmap.TimeIntTween() {
-					Time = Mathf.Max(d.startTime / 100f, 0f),
+					Time = Mathf.Max(GetRealTime(d.startTime), 0f) + timeOffset,
 					Value = 1 - d.start,
 					Tween = 0,
 				});
 				result.Add(new Beatmap.TimeIntTween() {
-					Time = Mathf.Max((d.endTime - 1) / 100f, 0f),
+					Time = Mathf.Max(GetRealTime(d.endTime), 0f) + timeOffset - 0.00001f,
 					Value = 1 - d.end,
 					Tween = 0,
 				});
@@ -330,15 +317,15 @@
 			return result;
 		}
 
-		private static JudgeLineEvent[] GetMoves (List<Beatmap.TimeFloatFloatTween> positions, float maxNoteTime) {
+		private static JudgeLineEvent[] GetMoves (List<Beatmap.TimeFloatFloatTween> positions, float maxNoteTime, float timeOffset) {
 			var result = new List<JudgeLineEvent>();
 			if (positions != null && positions.Count > 1) {
 				for (int i = 0; i < positions.Count - 1; i++) {
 					var pos = positions[i];
 					var next = positions[i + 1];
 					result.Add(new JudgeLineEvent() {
-						startTime = (int)(pos.Time * 100),
-						endTime = (int)(next.Time * 100),
+						startTime = (int)((pos.Time + timeOffset) * 100),
+						endTime = (int)((next.Time + timeOffset) * 100),
 						start = (int)Util.Remap(0f, 1f, 0f, 880f, Mathf.Clamp01(pos.A)) * 1000 + (int)Util.Remap(0f, 1f, 0f, 520f, Mathf.Clamp01(pos.B)),
 						end = (int)Util.Remap(0f, 1f, 0f, 880f, Mathf.Clamp01(next.A)) * 1000 + (int)Util.Remap(0f, 1f, 0f, 520f, Mathf.Clamp01(next.B)),
 					});
@@ -353,15 +340,15 @@
 			}
 			return result.ToArray();
 		}
-		private static JudgeLineEvent[] GetRotations (List<Beatmap.TimeFloatTween> rots, float maxNoteTime) {
+		private static JudgeLineEvent[] GetRotations (List<Beatmap.TimeFloatTween> rots, float maxNoteTime, float timeOffset) {
 			var result = new List<JudgeLineEvent>();
 			if (rots != null && rots.Count > 1) {
 				for (int i = 0; i < rots.Count - 1; i++) {
 					var rot = rots[i];
 					var next = rots[i + 1];
 					result.Add(new JudgeLineEvent() {
-						startTime = (int)(rot.Time * 100),
-						endTime = (int)(next.Time * 100),
+						startTime = (int)((rot.Time + timeOffset) * 100),
+						endTime = (int)((next.Time + timeOffset) * 100),
 						start = (int)rot.Value,
 						end = (int)next.Value,
 					});
@@ -376,15 +363,15 @@
 			}
 			return result.ToArray();
 		}
-		private static JudgeLineEvent[] GetDisappears (List<Beatmap.TimeIntTween> colors, float maxNoteTime) {
+		private static JudgeLineEvent[] GetDisappears (List<Beatmap.TimeIntTween> colors, float maxNoteTime, float timeOffset) {
 			var result = new List<JudgeLineEvent>();
 			if (colors != null && colors.Count > 1) {
 				for (int i = 0; i < colors.Count - 1; i++) {
 					var color = colors[i];
 					var next = colors[i + 1];
 					result.Add(new JudgeLineEvent() {
-						startTime = (int)(color.Time * 100),
-						endTime = (int)(next.Time * 100),
+						startTime = (int)((color.Time + timeOffset) * 100),
+						endTime = (int)((next.Time + timeOffset) * 100),
 						start = 1 - color.Value,
 						end = 1 - next.Value,
 					});
@@ -399,6 +386,9 @@
 			}
 			return result.ToArray();
 		}
+
+		private static float GetRealTime (int fuckedTime) =>
+			Mathf.Max(fuckedTime / 100f * 1.0475019f, 0f);
 
 
 	}
