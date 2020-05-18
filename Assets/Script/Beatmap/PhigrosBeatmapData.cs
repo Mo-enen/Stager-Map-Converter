@@ -266,13 +266,13 @@
 			for (int i = 0; i < moves.Length; i++) {
 				var m = moves[i];
 				result.Add(new Beatmap.TimeFloatFloatTween() {
-					Time = Mathf.Max(GetRealTime(m.startTime), 0f) + timeOffset,
+					Time = Mathf.Max(Mathf.Max(GetRealTime(m.startTime), 0f) + timeOffset, 0f),
 					A = Util.Remap(0f, 880f, 0f, 1f, m.start / 1000),
 					B = Util.Remap(0f, 520f, 0f, 520f / 880f, m.start % 1000),
 					Tween = 0,
 				});
 				result.Add(new Beatmap.TimeFloatFloatTween() {
-					Time = Mathf.Max(GetRealTime(m.endTime), 0f) + timeOffset - 0.00001f,
+					Time = Mathf.Max(Mathf.Max(GetRealTime(m.endTime), 0f) + timeOffset - 0.00001f, 0f),
 					A = Util.Remap(0f, 880f, 0f, 1f, m.end / 1000),
 					B = Util.Remap(0f, 520f, 0f, 520f / 880f, m.end % 1000),
 					Tween = 0,
@@ -286,12 +286,12 @@
 			for (int i = 0; i < rots.Length; i++) {
 				var r = rots[i];
 				result.Add(new Beatmap.TimeFloatTween() {
-					Time = Mathf.Max(GetRealTime(r.startTime), 0f) + timeOffset,
+					Time = Mathf.Max(Mathf.Max(GetRealTime(r.startTime), 0f) + timeOffset, 0f),
 					Value = r.start,
 					Tween = 0,
 				});
 				result.Add(new Beatmap.TimeFloatTween() {
-					Time = Mathf.Max(GetRealTime(r.endTime), 0f) + timeOffset - 0.00001f,
+					Time = Mathf.Max(Mathf.Max(GetRealTime(r.endTime), 0f) + timeOffset - 0.00001f, 0f),
 					Value = r.end,
 					Tween = 0,
 				});
@@ -304,12 +304,12 @@
 			for (int i = 0; i < dis.Length; i++) {
 				var d = dis[i];
 				result.Add(new Beatmap.TimeIntTween() {
-					Time = Mathf.Max(GetRealTime(d.startTime), 0f) + timeOffset,
+					Time = Mathf.Max(Mathf.Max(GetRealTime(d.startTime), 0f) + timeOffset, 0f),
 					Value = 1 - d.start,
 					Tween = 0,
 				});
 				result.Add(new Beatmap.TimeIntTween() {
-					Time = Mathf.Max(GetRealTime(d.endTime), 0f) + timeOffset - 0.00001f,
+					Time = Mathf.Max(Mathf.Max(GetRealTime(d.endTime), 0f) + timeOffset - 0.00001f, 0f),
 					Value = 1 - d.end,
 					Tween = 0,
 				});

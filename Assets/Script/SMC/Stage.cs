@@ -8,6 +8,7 @@
 	using System.Xml.Serialization;
 	using System.IO;
 	using System.Runtime.Serialization.Formatters.Binary;
+	using UnityEngine.EventSystems;
 
 	public partial class Stage : MonoBehaviour {
 
@@ -54,132 +55,163 @@
 
 
 		// Dynamix
-		public void UI_Dynamix_To_Stager () => Map_to_Stager(
+		public void UI_Dynamix_To_Stager (BaseEventData be) => Map_to_Stager(
 			"Dynamix",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
 			(path) => DynamixBeatmapData.DMap_to_SMap(Util.ReadXML<DynamixBeatmapData>(path)),
 			"xml", "txt"
 		);
 
 
-		public void UI_Stager_To_Dynamix () => Stager_to_Map("Dynamix", (path, name, sMap) => Util.WriteXML(
-			DynamixBeatmapData.SMap_to_DMap(sMap),
+		public void UI_Stager_To_Dynamix (BaseEventData be) => Stager_to_Map(
+			"Dynamix",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
+			(path, name, sMap) => Util.WriteXML(DynamixBeatmapData.SMap_to_DMap(sMap),
 			Util.CombinePaths(path, name + ".xml"))
 		);
 
 
 		// Voez
-		public void UI_Voez_To_Stager () => Map_to_Stager("Voez", "Track", "Note", (track, note) => {
-			var voezMap = JsonUtility.FromJson<VoezBeatmapData>(@"{""m_Tracks"":" + Util.FileToText(track) + @", ""m_Notes"":" + Util.FileToText(note) + @"}");
-			return VoezBeatmapData.VMap_to_SMap(voezMap);
-		}, "json", "txt");
+		public void UI_Voez_To_Stager () => Map_to_Stager(
+			"Voez", "Track", "Note", (track, note) => {
+				var voezMap = JsonUtility.FromJson<VoezBeatmapData>(@"{""m_Tracks"":" + Util.FileToText(track) + @", ""m_Notes"":" + Util.FileToText(note) + @"}");
+				return VoezBeatmapData.VMap_to_SMap(voezMap);
+			}, "json", "txt");
 
 
-		public void UI_Stager_To_Voez () => Stager_to_Map("Voez", (path, name, sMap) => {
-			var vMap = VoezBeatmapData.SMap_to_VMap(sMap);
-			string vJson = JsonUtility.ToJson(vMap);
-			int noteKeyWordIndex = vJson.IndexOf("m_Notes");
-			int trackKeyWordIndex = vJson.IndexOf("m_Tracks");
-			int lastRightBracesIndex = vJson.LastIndexOf('}');
-			int noteArrStartIndex = noteKeyWordIndex + 9;
-			int trackArrStartIndex = trackKeyWordIndex + 10;
-			int noteArrLength = 0;
-			int trackArrLength = 0;
-			if (noteArrStartIndex > trackArrStartIndex) {
-				int trackEndCommaIndex = vJson.LastIndexOf(',', noteKeyWordIndex, noteKeyWordIndex - trackArrStartIndex);
-				trackArrLength = trackEndCommaIndex - trackArrStartIndex;
-				noteArrLength = lastRightBracesIndex - noteArrStartIndex;
-			} else {
-				int noteEndCommaIndex = vJson.LastIndexOf(',', trackKeyWordIndex, trackKeyWordIndex - noteArrStartIndex);
-				noteArrLength = noteEndCommaIndex - noteArrStartIndex;
-				trackArrLength = lastRightBracesIndex - trackArrStartIndex;
+		public void UI_Stager_To_Voez (BaseEventData be) => Stager_to_Map(
+			"Voez",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
+			(path, name, sMap) => {
+				var vMap = VoezBeatmapData.SMap_to_VMap(sMap);
+				string vJson = JsonUtility.ToJson(vMap);
+				int noteKeyWordIndex = vJson.IndexOf("m_Notes");
+				int trackKeyWordIndex = vJson.IndexOf("m_Tracks");
+				int lastRightBracesIndex = vJson.LastIndexOf('}');
+				int noteArrStartIndex = noteKeyWordIndex + 9;
+				int trackArrStartIndex = trackKeyWordIndex + 10;
+				int noteArrLength = 0;
+				int trackArrLength = 0;
+				if (noteArrStartIndex > trackArrStartIndex) {
+					int trackEndCommaIndex = vJson.LastIndexOf(',', noteKeyWordIndex, noteKeyWordIndex - trackArrStartIndex);
+					trackArrLength = trackEndCommaIndex - trackArrStartIndex;
+					noteArrLength = lastRightBracesIndex - noteArrStartIndex;
+				} else {
+					int noteEndCommaIndex = vJson.LastIndexOf(',', trackKeyWordIndex, trackKeyWordIndex - noteArrStartIndex);
+					noteArrLength = noteEndCommaIndex - noteArrStartIndex;
+					trackArrLength = lastRightBracesIndex - trackArrStartIndex;
+				}
+				string voezNoteJson = vJson.Substring(noteArrStartIndex, noteArrLength);
+				string voezTrackJson = vJson.Substring(trackArrStartIndex, trackArrLength);
+				Util.TextToFile(voezNoteJson, Util.CombinePaths(path, name + "_Note.json"));
+				Util.TextToFile(voezTrackJson, Util.CombinePaths(path, name + "_Track.json"));
 			}
-			string voezNoteJson = vJson.Substring(noteArrStartIndex, noteArrLength);
-			string voezTrackJson = vJson.Substring(trackArrStartIndex, trackArrLength);
-			Util.TextToFile(voezNoteJson, Util.CombinePaths(path, name + "_Note.json"));
-			Util.TextToFile(voezTrackJson, Util.CombinePaths(path, name + "_Track.json"));
-		});
+		);
 
 
 
 		// Deemo
-		public void UI_Deemo_To_Stager () => Map_to_Stager(
+		public void UI_Deemo_To_Stager (BaseEventData be) => Map_to_Stager(
 			"Deemo",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
 			(path) => DeemoBeatmapData.DMap_to_SMap(JsonUtility.FromJson<DeemoBeatmapData>(Util.FileToText(path).Replace("$", "__"))),
 			"json", "txt"
 		);
 
 
-		public void UI_Stager_To_Deemo () => Stager_to_Map("Deemo", (path, name, sMap) => Util.TextToFile(
+		public void UI_Stager_To_Deemo (BaseEventData be) => Stager_to_Map(
+			"Deemo",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right, (path, name, sMap) => Util.TextToFile(
 			JsonUtility.ToJson(DeemoBeatmapData.SMap_to_DMap(sMap), false).Replace("__", "$"),
 			Util.CombinePaths(path, name + ".json")
 		));
 
 
 		// Osu
-		public void UI_Osu_To_Stager () => Map_to_Stager(
+		public void UI_Osu_To_Stager (BaseEventData be) => Map_to_Stager(
 			"OSU",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
 			(path) => OsuBeatmapData.Osu_to_Stager(Util.FileToText(path)),
 			"osu", "txt"
 		);
 
 
-		public void UI_Stager_To_Osu () => Stager_to_Map("OSU", (path, name, sMap) => Util.TextToFile(
+		public void UI_Stager_To_Osu (BaseEventData be) => Stager_to_Map(
+			"OSU",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
+			(path, name, sMap) => Util.TextToFile(
 			OsuBeatmapData.Stager_to_Osu(sMap, name),
 			Util.CombinePaths(path, name + ".osu")
 		));
 
 
 		// Arcaea
-		public void UI_Arcaea_To_Stager () => Map_to_Stager(
+		public void UI_Arcaea_To_Stager (BaseEventData be) => Map_to_Stager(
 			"Arcaea",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
 			(path) => ArcaeaBeatmapData.Arcaea_To_Stager(Util.FileToText(path)),
 			"aff", "txt"
 		);
 
 
-		public void UI_Stager_To_Arcaea () => Stager_to_Map("Arcaea", (path, name, sMap) => Util.TextToFile(
+		public void UI_Stager_To_Arcaea (BaseEventData be) => Stager_to_Map(
+			"Arcaea",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
+			(path, name, sMap) => Util.TextToFile(
 			ArcaeaBeatmapData.Stager_To_Arcaea(sMap),
 			Util.CombinePaths(path, name + ".aff")
 		));
 
 
 		// BMS
-		public void UI_BMS_To_Stager () => Map_to_Stager(
+		public void UI_BMS_To_Stager (BaseEventData be) => Map_to_Stager(
 			"BMS",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
 			(path) => BmsBeatmapData.Bms_To_Stager(Util.FileToText(path)),
 			"bms", "bme", "bml", "txt"
 		);
 
 
-		public void UI_Stager_To_BMS () => Stager_to_Map("BMS", (path, name, sMap) => Util.TextToFile(
+		public void UI_Stager_To_BMS (BaseEventData be) => Stager_to_Map(
+			"BMS",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
+			(path, name, sMap) => Util.TextToFile(
 			BmsBeatmapData.Stager_To_Bms(sMap, name),
 			Util.CombinePaths(path, name + ".bms")
 		));
 
 
 		// KSH
-		public void UI_KSM_To_Stager () => Map_to_Stager(
+		public void UI_KSM_To_Stager (BaseEventData be) => Map_to_Stager(
 			"KShootMania",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
 			(path) => KsmBeatmapData.KSM_to_Stager(Util.FileToText(path)),
 			"ksh", "txt"
 		);
 
 
-		public void UI_Stager_To_KSM () => Stager_to_Map("KShootMania", (path, name, sMap) => Util.TextToFile(
+		public void UI_Stager_To_KSM (BaseEventData be) => Stager_to_Map(
+			"KShootMania",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
+			(path, name, sMap) => Util.TextToFile(
 			KsmBeatmapData.Stager_to_KSM(sMap, name),
 			Util.CombinePaths(path, name + ".ksh")
 		));
 
 
 		// Phigros
-		public void UI_Phigros_To_Stager () => Map_to_Stager(
+		public void UI_Phigros_To_Stager (BaseEventData be) => Map_to_Stager(
 			"Phigros",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
 			(path) => PhigrosBeatmapData.Phigros_to_Stager(JsonUtility.FromJson<PhigrosBeatmapData>(Util.FileToText(path))),
 			"json", "txt"
 		);
 
 
-		public void UI_Stager_To_Phigros () => Stager_to_Map("Phigros", (path, name, sMap) => Util.TextToFile(
+		public void UI_Stager_To_Phigros (BaseEventData be) => Stager_to_Map(
+			"Phigros",
+			(be as PointerEventData).button == PointerEventData.InputButton.Right,
+			(path, name, sMap) => Util.TextToFile(
 			JsonUtility.ToJson(PhigrosBeatmapData.Stager_to_Phigros(sMap), false),
 			Util.CombinePaths(path, name + ".txt")
 		));
@@ -202,11 +234,11 @@
 
 
 		private void Map_to_Stager (
-			string mapName,
+			string mapName, bool forAll,
 			System.Func<string, Beatmap> convert,
 			params string[] exts
 		) {
-			var paths = DialogUtil.PickFilesDialog($"Pick {mapName} Map files", $"{mapName} Map", exts);
+			var paths = GetPathsFromDialog(mapName, forAll, exts);
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
 			string errorMsg = "";
@@ -259,10 +291,10 @@
 
 
 		private void Stager_to_Map (
-			string mapName,
+			string mapName, bool forAll,
 			System.Action<string, string, Beatmap> convert
 		) {
-			var paths = DialogUtil.PickFilesDialog("Pick Stager Beatmap files", "Stager Beatmap", "json", "txt");
+			var paths = GetPathsFromDialog("Stager", forAll, "json", "txt");
 			if (paths is null || paths.Length == 0) { return; }
 			int successCount = 0;
 			string errorMsg = "";
@@ -285,6 +317,27 @@
 			}
 		}
 
+
+		private string[] GetPathsFromDialog (string mapName, bool forAll, params string[] exts) {
+			string[] paths = null;
+			if (forAll) {
+				string folderPath = DialogUtil.PickFolderDialog($"Pick folder for {mapName} Map");
+				if (!string.IsNullOrEmpty(folderPath)) {
+					string[] fixedExts = new string[exts.Length];
+					for (int i = 0; i < fixedExts.Length; i++) {
+						fixedExts[i] = "*." + exts[i];
+					}
+					var files = Util.GetFilesIn(folderPath, false, fixedExts);
+					paths = new string[files.Length];
+					for (int i = 0; i < paths.Length; i++) {
+						paths[i] = files[i].FullName;
+					}
+				}
+			} else {
+				paths = DialogUtil.PickFilesDialog($"Pick {mapName} Map files", $"{mapName} Map", exts);
+			}
+			return paths;
+		}
 
 
 		#endregion

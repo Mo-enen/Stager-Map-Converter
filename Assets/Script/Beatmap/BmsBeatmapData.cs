@@ -380,7 +380,7 @@
 				int tIndex = Mathf.Clamp(note.TrackIndex, 0, 7);
 				int sectionIndex = Mathf.FloorToInt(note.Time / sectionDuration);
 				int noteSectionIndex = Mathf.FloorToInt(32f * ((note.Time % sectionDuration) / sectionDuration));
-				if (note.m_Duration <= 0) {
+				if (note.duration <= 0) {
 					sections[sectionIndex].noteTracks[noteSectionIndex, tIndex] = true;
 				} else {
 					sections[sectionIndex].holdTracks[noteSectionIndex, tIndex] = true;

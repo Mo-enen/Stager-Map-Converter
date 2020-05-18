@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 50042442}
   - component: {fileID: 50042441}
   - component: {fileID: 50042440}
+  - component: {fileID: 50042444}
   - component: {fileID: 50042439}
   m_Layer: 5
   m_Name: BMS
@@ -239,7 +240,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &50042439
 MonoBehaviour:
@@ -250,51 +251,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 50042437}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 50042441}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_BMS_To_Stager
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_BMS_To_Stager
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &50042440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -362,8 +337,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select *.bms *.bme files. For each file selected, create a
-    Stager beatmap file at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2ABMS\u8C31\u9762\u6587\u4EF6(*.bms
-    *.bme)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002"
+    Stager beatmap file at the same folder.\r (Right click to pick a folder and convert
+    all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2ABMS\u8C31\u9762\u6587\u4EF6(*.bms
+    *.bme)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &50042443
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -372,6 +348,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 50042437}
   m_CullTransparentMesh: 0
+--- !u!114 &50042444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50042437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 50042441}
 --- !u!1 &59175332
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,6 +581,7 @@ GameObject:
   - component: {fileID: 149748132}
   - component: {fileID: 149748131}
   - component: {fileID: 149748130}
+  - component: {fileID: 149748134}
   - component: {fileID: 149748129}
   m_Layer: 5
   m_Name: KSM
@@ -593,7 +610,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &149748129
 MonoBehaviour:
@@ -604,51 +621,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 149748127}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 149748131}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_KSM_To_Stager
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_KSM_To_Stager
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &149748130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -716,7 +707,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select *.ksh files. For each file selected, create a Stager
-    beatmap file at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AKShootMania\u8C31\u9762\u6587\u4EF6(*.ksh)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002"
+    beatmap file at the same folder.\r (Right click to pick a folder and convert
+    all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AKShootMania\u8C31\u9762\u6587\u4EF6(*.ksh)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &149748133
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -725,6 +717,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 149748127}
   m_CullTransparentMesh: 0
+--- !u!114 &149748134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149748127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 149748131}
 --- !u!1 &198857892
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,6 +938,7 @@ GameObject:
   - component: {fileID: 265992340}
   - component: {fileID: 265992339}
   - component: {fileID: 265992338}
+  - component: {fileID: 265992342}
   - component: {fileID: 265992337}
   m_Layer: 5
   m_Name: Deemo
@@ -934,7 +967,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &265992337
 MonoBehaviour:
@@ -945,51 +978,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 265992335}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 265992339}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Deemo_To_Stager
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Deemo_To_Stager
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &265992338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1057,7 +1064,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Deemo JSON files. For each file selected, create a
-    Stager beatmap file at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2ADeemo\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002"
+    Stager beatmap file at the same folder.\r (Right click to pick a folder and convert
+    all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2ADeemo\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &265992341
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1066,6 +1074,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 265992335}
   m_CullTransparentMesh: 0
+--- !u!114 &265992342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265992335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 265992339}
 --- !u!1 &284525644
 GameObject:
   m_ObjectHideFlags: 0
@@ -1308,7 +1356,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 18
+  m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -1958,6 +2006,7 @@ GameObject:
   - component: {fileID: 591819702}
   - component: {fileID: 591819701}
   - component: {fileID: 591819700}
+  - component: {fileID: 591819704}
   - component: {fileID: 591819699}
   m_Layer: 5
   m_Name: Phigros
@@ -1986,7 +2035,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &591819699
 MonoBehaviour:
@@ -1997,51 +2046,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 591819697}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 591819701}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Phigros_To_Stager
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Phigros_To_Stager
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &591819700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2109,8 +2132,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select *.json *.txt files. For each file selected, create
-    a Stager beatmap file at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2APhigros\u8C31\u9762\u6587\u4EF6(*.json
-    *.txt)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002"
+    a Stager beatmap file at the same folder.\r (Right click to pick a folder and
+    convert all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2APhigros\u8C31\u9762\u6587\u4EF6(*.json
+    *.txt)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &591819703
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2119,6 +2143,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591819697}
   m_CullTransparentMesh: 0
+--- !u!114 &591819704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591819697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 591819701}
 --- !u!1 &676499326
 GameObject:
   m_ObjectHideFlags: 0
@@ -3262,6 +3326,7 @@ GameObject:
   - component: {fileID: 970926179}
   - component: {fileID: 970926178}
   - component: {fileID: 970926177}
+  - component: {fileID: 970926181}
   - component: {fileID: 970926176}
   m_Layer: 5
   m_Name: Arcaea
@@ -3290,7 +3355,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &970926176
 MonoBehaviour:
@@ -3301,51 +3366,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 970926174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 970926178}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Arcaea_To_Stager
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Arcaea_To_Stager
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &970926177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3413,7 +3452,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select *.aff files. For each file selected, create a Stager
-    beatmap file at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AArcaea\u8C31\u9762\u6587\u4EF6(*.aff)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002"
+    beatmap file at the same folder.\r (Right click to pick a folder and convert
+    all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AArcaea\u8C31\u9762\u6587\u4EF6(*.aff)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &970926180
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3422,6 +3462,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 970926174}
   m_CullTransparentMesh: 0
+--- !u!114 &970926181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970926174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 970926178}
 --- !u!1 &1004916675
 GameObject:
   m_ObjectHideFlags: 0
@@ -3484,7 +3564,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 18
+  m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -3594,6 +3674,7 @@ GameObject:
   - component: {fileID: 1101297932}
   - component: {fileID: 1101297931}
   - component: {fileID: 1101297930}
+  - component: {fileID: 1101297934}
   - component: {fileID: 1101297929}
   m_Layer: 5
   m_Name: KSM
@@ -3622,7 +3703,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1101297929
 MonoBehaviour:
@@ -3633,51 +3714,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1101297927}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1101297931}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Stager_To_KSM
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Stager_To_KSM
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1101297930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3745,7 +3800,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Stager beatmap files. For each file selected, create
-    a folder contains KShootMania map files at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3AKShootMania\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002"
+    a folder contains KShootMania map files at the same folder.\r (Right click to
+    pick a folder and convert all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3AKShootMania\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &1101297933
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3754,6 +3810,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1101297927}
   m_CullTransparentMesh: 0
+--- !u!114 &1101297934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101297927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1101297931}
 --- !u!1 &1107166824
 GameObject:
   m_ObjectHideFlags: 0
@@ -3767,6 +3863,7 @@ GameObject:
   - component: {fileID: 1107166830}
   - component: {fileID: 1107166828}
   - component: {fileID: 1107166827}
+  - component: {fileID: 1107166831}
   - component: {fileID: 1107166826}
   m_Layer: 5
   m_Name: Voez
@@ -3795,7 +3892,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1107166826
 MonoBehaviour:
@@ -3806,51 +3903,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1107166824}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1107166828}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Voez_To_Stager
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Voez_To_Stager
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1107166827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3928,6 +3999,46 @@ MonoBehaviour:
   m_TipKey: "Click and select Voez track json file by the first dialog, note json
     file by the second dialog. create a Stager beatmap file at the same folder with
     note json file.\n\n\u70B9\u51FB\u540E\u5728\u7B2C\u4E00\u4E2A\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9Voez\u8F68\u9053\u6587\u4EF6\uFF0C\u7B2C\u4E8C\u4E2A\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9Voez\u97F3\u7B26\u6587\u4EF6\uFF0C\u9009\u4E2D\u7684\u6587\u4EF6\u5C06\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u97F3\u7B26\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002"
+--- !u!114 &1107166831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107166824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1107166828}
 --- !u!1 &1120271152
 GameObject:
   m_ObjectHideFlags: 0
@@ -4159,6 +4270,7 @@ GameObject:
   - component: {fileID: 1187661296}
   - component: {fileID: 1187661295}
   - component: {fileID: 1187661294}
+  - component: {fileID: 1187661298}
   - component: {fileID: 1187661293}
   m_Layer: 5
   m_Name: BMS
@@ -4187,7 +4299,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1187661293
 MonoBehaviour:
@@ -4198,51 +4310,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1187661291}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1187661295}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Stager_To_BMS
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Stager_To_BMS
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1187661294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4310,7 +4396,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Stager beatmap files. For each file selected, create
-    a folder contains BMS map files at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3ABMS\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002"
+    a folder contains BMS map files at the same folder.\r (Right click to pick a
+    folder and convert all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3ABMS\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &1187661297
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4319,6 +4406,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1187661291}
   m_CullTransparentMesh: 0
+--- !u!114 &1187661298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187661291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1187661295}
 --- !u!1 &1215610451
 GameObject:
   m_ObjectHideFlags: 0
@@ -4602,6 +4729,7 @@ GameObject:
   - component: {fileID: 1240640244}
   - component: {fileID: 1240640242}
   - component: {fileID: 1240640241}
+  - component: {fileID: 1240640245}
   - component: {fileID: 1240640240}
   m_Layer: 5
   m_Name: Voez
@@ -4630,7 +4758,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1240640240
 MonoBehaviour:
@@ -4641,51 +4769,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1240640238}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1240640242}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Stager_To_Voez
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Stager_To_Voez
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1240640241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4761,7 +4863,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Stager beatmap files. For each file selected, create
-    a folder contains Voez track/note json files at the same folder.\n\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3AVoez\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002"
+    a folder contains Voez track/note json files at the same folder. (Right click
+    to pick a folder and convert all maps in that folder)\n\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3AVoez\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
+--- !u!114 &1240640245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240640238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1240640242}
 --- !u!1 &1250859606
 GameObject:
   m_ObjectHideFlags: 0
@@ -4775,6 +4918,7 @@ GameObject:
   - component: {fileID: 1250859611}
   - component: {fileID: 1250859610}
   - component: {fileID: 1250859609}
+  - component: {fileID: 1250859613}
   - component: {fileID: 1250859608}
   m_Layer: 5
   m_Name: Arcaea
@@ -4803,7 +4947,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1250859608
 MonoBehaviour:
@@ -4814,51 +4958,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1250859606}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1250859610}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Stager_To_Arcaea
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Stager_To_Arcaea
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1250859609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4926,7 +5044,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Stager beatmap files. For each file selected, create
-    a folder contains Arcaea map files at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3AArcaea\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002"
+    a folder contains Arcaea map files at the same folder.\r (Right click to pick
+    a folder and convert all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3AArcaea\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &1250859612
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4935,6 +5054,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1250859606}
   m_CullTransparentMesh: 0
+--- !u!114 &1250859613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1250859606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1250859610}
 --- !u!1 &1285008955
 GameObject:
   m_ObjectHideFlags: 0
@@ -4948,6 +5107,7 @@ GameObject:
   - component: {fileID: 1285008960}
   - component: {fileID: 1285008959}
   - component: {fileID: 1285008958}
+  - component: {fileID: 1285008962}
   - component: {fileID: 1285008957}
   m_Layer: 5
   m_Name: Phigros
@@ -4976,7 +5136,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1285008957
 MonoBehaviour:
@@ -4987,51 +5147,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1285008955}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1285008959}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Stager_To_Phigros
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Stager_To_Phigros
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1285008958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5099,7 +5233,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Stager beatmap files. For each file selected, create
-    a folder contains Phigros map files at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3APhigros\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002"
+    a folder contains Phigros map files at the same folder.\r (Right click to pick
+    a folder and convert all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3APhigros\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &1285008961
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5108,6 +5243,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1285008955}
   m_CullTransparentMesh: 0
+--- !u!114 &1285008962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285008955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1285008959}
 --- !u!1 &1297536781
 GameObject:
   m_ObjectHideFlags: 0
@@ -5280,6 +5455,7 @@ GameObject:
   - component: {fileID: 1314140095}
   - component: {fileID: 1314140094}
   - component: {fileID: 1314140093}
+  - component: {fileID: 1314140097}
   - component: {fileID: 1314140092}
   m_Layer: 5
   m_Name: Deemo
@@ -5308,7 +5484,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1314140092
 MonoBehaviour:
@@ -5319,51 +5495,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1314140090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1314140094}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Stager_To_Deemo
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Stager_To_Deemo
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1314140093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5431,7 +5581,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Stager beatmap files. For each file selected, create
-    a folder contains Deemo note json files at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3ADeemo\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002"
+    a folder contains Deemo note json files at the same folder.\r (Right click to
+    pick a folder and convert all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3ADeemo\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &1314140096
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5440,6 +5591,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1314140090}
   m_CullTransparentMesh: 0
+--- !u!114 &1314140097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314140090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1314140094}
 --- !u!1 &1321722307
 GameObject:
   m_ObjectHideFlags: 0
@@ -6742,6 +6933,7 @@ GameObject:
   - component: {fileID: 1564941087}
   - component: {fileID: 1564941083}
   - component: {fileID: 1564941085}
+  - component: {fileID: 1564941088}
   - component: {fileID: 1564941086}
   m_Layer: 5
   m_Name: Dynamix
@@ -6770,7 +6962,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1564941083
 MonoBehaviour:
@@ -6843,51 +7035,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1564941081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1564941083}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Stager_To_Dynamix
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Stager_To_Dynamix
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1564941087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6901,7 +7067,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Stager beatmap files. For each file selected, create
-    a Dynamix XML file at the same folder.\n\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Dynamix\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002"
+    a Dynamix XML file at the same folder. (Right click to pick a folder and convert
+    all maps in that folder)\n\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Dynamix\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
+--- !u!114 &1564941088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564941081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1564941083}
 --- !u!1 &1565068789
 GameObject:
   m_ObjectHideFlags: 0
@@ -6915,6 +7122,7 @@ GameObject:
   - component: {fileID: 1565068794}
   - component: {fileID: 1565068793}
   - component: {fileID: 1565068792}
+  - component: {fileID: 1565068796}
   - component: {fileID: 1565068791}
   m_Layer: 5
   m_Name: Osu
@@ -6943,7 +7151,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1565068791
 MonoBehaviour:
@@ -6954,51 +7162,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1565068789}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1565068793}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Osu_To_Stager
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Osu_To_Stager
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1565068792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7066,7 +7248,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select *.osu files. For each file selected, create a Stager
-    beatmap file at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AOsu\u8C31\u9762\u6587\u4EF6(*.osu)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002"
+    beatmap file at the same folder.\r (Right click to pick a folder and convert
+    all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AOsu\u8C31\u9762\u6587\u4EF6(*.osu)\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &1565068795
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7075,6 +7258,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1565068789}
   m_CullTransparentMesh: 0
+--- !u!114 &1565068796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1565068789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1565068793}
 --- !u!1 &1573993550
 GameObject:
   m_ObjectHideFlags: 0
@@ -7596,6 +7819,7 @@ GameObject:
   - component: {fileID: 1750280342}
   - component: {fileID: 1750280341}
   - component: {fileID: 1750280340}
+  - component: {fileID: 1750280344}
   - component: {fileID: 1750280339}
   m_Layer: 5
   m_Name: Osu
@@ -7624,7 +7848,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1750280339
 MonoBehaviour:
@@ -7635,51 +7859,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1750280337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1750280341}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Stager_To_Osu
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Stager_To_Osu
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1750280340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7747,7 +7945,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Stager beatmap files. For each file selected, create
-    a folder contains osu map files at the same folder.\r\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3AOSU\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002"
+    a folder contains osu map files at the same folder.\r (Right click to pick a
+    folder and convert all maps in that folder)\n\r\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2AStager\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u4E3AOSU\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u76EE\u5F55\u4E0B\u7684\u6587\u4EF6\u5939\u91CC\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
 --- !u!222 &1750280343
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7756,6 +7955,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750280337}
   m_CullTransparentMesh: 0
+--- !u!114 &1750280344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750280337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1750280341}
 --- !u!1 &1755144577
 GameObject:
   m_ObjectHideFlags: 0
@@ -8297,6 +8536,7 @@ GameObject:
   - component: {fileID: 2046664475}
   - component: {fileID: 2046664473}
   - component: {fileID: 2046664472}
+  - component: {fileID: 2046664476}
   - component: {fileID: 2046664471}
   m_Layer: 5
   m_Name: Dynamix
@@ -8325,7 +8565,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2046664471
 MonoBehaviour:
@@ -8336,51 +8576,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 2046664469}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_SelectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 2046664473}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1297536787}
-        m_MethodName: UI_Dynamix_To_Stager
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1297536787}
+          m_MethodName: UI_Dynamix_To_Stager
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &2046664472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8456,4 +8670,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipKey: "Click and select Dynamix XML files. For each file selected, create a
-    Stager beatmap file at the same folder.\n\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2ADynamix\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002"
+    Stager beatmap file at the same folder. (Right click to pick a folder and convert
+    all maps in that folder)\n\n\u70B9\u51FB\u540E\u5728\u65B0\u7A97\u53E3\u4E2D\u9009\u62E9\u4E00\u4E2A\u6216\u591A\u4E2ADynamix\u8C31\u9762\u6587\u4EF6\uFF0C\u6BCF\u4E2A\u88AB\u9009\u4E2D\u7684\u6587\u4EF6\u90FD\u4F1A\u88AB\u8F6C\u6362\u6210Stager\u8C31\u9762\u6587\u4EF6\uFF0C\u751F\u6210\u7684\u7ED3\u679C\u5C06\u88AB\u4FDD\u5B58\u5728\u4E0E\u6E90\u6587\u4EF6\u76F8\u540C\u7684\u76EE\u5F55\u4E0B\u3002\uFF08\u53F3\u952E\u70B9\u51FB\u53EF\u4EE5\u8F6C\u6362\u6587\u4EF6\u5939\u5185\u7684\u6240\u6709\u8C31\u9762\uFF09"
+--- !u!114 &2046664476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046664469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2046664473}

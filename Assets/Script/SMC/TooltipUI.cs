@@ -13,7 +13,7 @@
 		// VAR
 		public static Text TipLabel { get; set; } = null;
 
-		[TextArea(6, 12), SerializeField] private string m_TipKey = "";
+		[TextArea(6, 24), SerializeField] private string m_TipKey = "";
 
 
 		// MSG

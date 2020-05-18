@@ -354,8 +354,8 @@
 				if (note.TrackIndex < 4) {
 					// Ground
 					Notes.Add(new Note() {
-						Time = note.m_Time,
-						Duration = note.m_Duration,
+						Time = note.time,
+						Duration = note.duration,
 						Lane = Mathf.Clamp(note.TrackIndex + 1, 1, 4),
 					});
 				} else if (note.LinkedNoteIndex >= 0 && note.LinkedNoteIndex < sMap.Notes.Count && !arcDoneHash.Contains(i)) {
@@ -363,8 +363,8 @@
 					arcDoneHash.Add(i);
 					var linkedNote = sMap.Notes[note.LinkedNoteIndex];
 					Arcs.Add((new Arc() {
-						Time = note.m_Time,
-						TimeEnd = linkedNote.m_Time,
+						Time = note.time,
+						TimeEnd = linkedNote.time,
 						XStart = note.X,
 						XEnd = linkedNote.X,
 						YStart = note.Z / SCALE_Z,
@@ -389,7 +389,7 @@
 				float distance = float.MaxValue;
 				var notePos = new Vector2(note.X, note.Z / SCALE_Z);
 				foreach (var (arc, _) in Arcs) {
-					if (!arc.Skyline || note.m_Time < arc.Time || note.m_Time > arc.TimeEnd) { continue; }
+					if (!arc.Skyline || note.time < arc.Time || note.time > arc.TimeEnd) { continue; }
 					float dis = Vector2.Distance(notePos, new Vector2(
 						Util.Remap(arc.Time / 1000f, arc.TimeEnd / 1000f, arc.XStart, arc.XEnd, note.Time),
 						Util.Remap(arc.Time / 1000f, arc.TimeEnd / 1000f, arc.YStart, arc.YEnd, note.Time)
@@ -403,15 +403,15 @@
 					if (closestArc.Arctap == null) {
 						closestArc.Arctap = new List<int>();
 					}
-					closestArc.Arctap.Add(note.m_Time);
+					closestArc.Arctap.Add(note.time);
 				}
 			}
 
 			// Timing
 			foreach (var speed in sMap.Timings) {
-				if (speed.m_Time > 0) {
+				if (speed.time > 0) {
 					Timings.Add(new Timing() {
-						Time = speed.m_Time,
+						Time = speed.time,
 						Beat = 4f,
 						BPM = speed.Speed * sMap.BPM,
 					});
@@ -477,95 +477,95 @@
 
 				switch (key.ToLower()) {
 					case "": {
-							var values = valueStr.Replace("(", "").Replace(")", "").Replace(";", "").Split(',');
-							if (values == null || values.Length < 2) { break; }
-							if (int.TryParse(values[0], out int _time) && int.TryParse(values[1], out int _lane)) {
-								Notes.Add(new Note() {
-									Time = _time + timeOffset,
-									Duration = 0,
-									Lane = _lane,
-								});
-							}
+						var values = valueStr.Replace("(", "").Replace(")", "").Replace(";", "").Split(',');
+						if (values == null || values.Length < 2) { break; }
+						if (int.TryParse(values[0], out int _time) && int.TryParse(values[1], out int _lane)) {
+							Notes.Add(new Note() {
+								Time = _time + timeOffset,
+								Duration = 0,
+								Lane = _lane,
+							});
 						}
-						break;
+					}
+					break;
 					case "hold": {
-							var values = valueStr.Replace("(", "").Replace(")", "").Replace(";", "").Split(',');
-							if (values == null || values.Length < 2) { break; }
-							if (int.TryParse(values[0], out int _time) && int.TryParse(values[1], out int _timeEnd) && int.TryParse(values[2], out int _lane)) {
-								Notes.Add(new Note() {
-									Time = _time + timeOffset,
-									Duration = Mathf.Max(_timeEnd - _time, 0),
-									Lane = _lane,
-								});
-							}
+						var values = valueStr.Replace("(", "").Replace(")", "").Replace(";", "").Split(',');
+						if (values == null || values.Length < 2) { break; }
+						if (int.TryParse(values[0], out int _time) && int.TryParse(values[1], out int _timeEnd) && int.TryParse(values[2], out int _lane)) {
+							Notes.Add(new Note() {
+								Time = _time + timeOffset,
+								Duration = Mathf.Max(_timeEnd - _time, 0),
+								Lane = _lane,
+							});
 						}
-						break;
+					}
+					break;
 					case "arc": {
-							int arcLen = valueStr.IndexOf('[');
-							if (arcLen < 0) {
-								arcLen = valueStr.Length;
-							}
-							var values = valueStr.Substring(0, arcLen).Replace("(", "").Replace(")", "").Replace(";", "").Split(',');
-							if (values == null || values.Length < 10) { break; }
-							var arc = new Arc() { Arctap = null, };
-							// Arc
-							if (
-								int.TryParse(values[0], out int _timeStart) &&
-								int.TryParse(values[1], out int _timeEnd) &&
-								float.TryParse(values[2], out float _xStart) &&
-								float.TryParse(values[3], out float _xEnd) &&
-								float.TryParse(values[5], out float _yStart) &&
-								float.TryParse(values[6], out float _yEnd) &&
-								int.TryParse(values[7], out int _color) &&
-								bool.TryParse(values[9].ToLower(), out bool _skyLine)
-							) {
-								arc.Time = _timeStart + timeOffset;
-								arc.TimeEnd = _timeEnd + timeOffset;
-								arc.XStart = Mathf.LerpUnclamped(1f / 4f, 3f / 4f, _xStart);
-								arc.XEnd = Mathf.LerpUnclamped(1f / 4f, 3f / 4f, _xEnd);
-								arc.YStart = _yStart;
-								arc.YEnd = _yEnd;
-								arc.Color = _color;
-								arc.Ease = values[4];
-								arc.Fx = values[8];
-								arc.Skyline = _skyLine;
-							} else {
-								break;
-							}
-							// Arc Tap
-							if (arcLen < valueStr.Length) {
-								var tapValues = valueStr.Substring(arcLen, valueStr.Length - arcLen).Replace("arctap", "").Replace("(", "").Replace(")", "").Replace("[", "").Replace("]", "").Replace(";", "").Split(',');
-								if (tapValues != null && tapValues.Length > 0) {
-									arc.Arctap = new List<int>();
-									foreach (var tapStr in tapValues) {
-										if (int.TryParse(tapStr, out int _tapTime)) {
-											arc.Arctap.Add(_tapTime + timeOffset);
-										}
+						int arcLen = valueStr.IndexOf('[');
+						if (arcLen < 0) {
+							arcLen = valueStr.Length;
+						}
+						var values = valueStr.Substring(0, arcLen).Replace("(", "").Replace(")", "").Replace(";", "").Split(',');
+						if (values == null || values.Length < 10) { break; }
+						var arc = new Arc() { Arctap = null, };
+						// Arc
+						if (
+							int.TryParse(values[0], out int _timeStart) &&
+							int.TryParse(values[1], out int _timeEnd) &&
+							float.TryParse(values[2], out float _xStart) &&
+							float.TryParse(values[3], out float _xEnd) &&
+							float.TryParse(values[5], out float _yStart) &&
+							float.TryParse(values[6], out float _yEnd) &&
+							int.TryParse(values[7], out int _color) &&
+							bool.TryParse(values[9].ToLower(), out bool _skyLine)
+						) {
+							arc.Time = _timeStart + timeOffset;
+							arc.TimeEnd = _timeEnd + timeOffset;
+							arc.XStart = Mathf.LerpUnclamped(1f / 4f, 3f / 4f, _xStart);
+							arc.XEnd = Mathf.LerpUnclamped(1f / 4f, 3f / 4f, _xEnd);
+							arc.YStart = _yStart;
+							arc.YEnd = _yEnd;
+							arc.Color = _color;
+							arc.Ease = values[4];
+							arc.Fx = values[8];
+							arc.Skyline = _skyLine;
+						} else {
+							break;
+						}
+						// Arc Tap
+						if (arcLen < valueStr.Length) {
+							var tapValues = valueStr.Substring(arcLen, valueStr.Length - arcLen).Replace("arctap", "").Replace("(", "").Replace(")", "").Replace("[", "").Replace("]", "").Replace(";", "").Split(',');
+							if (tapValues != null && tapValues.Length > 0) {
+								arc.Arctap = new List<int>();
+								foreach (var tapStr in tapValues) {
+									if (int.TryParse(tapStr, out int _tapTime)) {
+										arc.Arctap.Add(_tapTime + timeOffset);
 									}
 								}
 							}
-							// Add
-							Arcs.Add((arc, false));
 						}
-						break;
+						// Add
+						Arcs.Add((arc, false));
+					}
+					break;
 					case "timing": {
-							var values = valueStr.Replace("(", "").Replace(")", "").Replace(";", "").Split(',');
-							if (values == null || values.Length < 3) { break; }
-							if (int.TryParse(values[0], out int _offset) && float.TryParse(values[1], out float _bpm) && float.TryParse(values[2], out float _beats)) {
-								Timings.Add(new Timing() {
-									Time = _offset,
-									BPM = _bpm,
-									Beat = _beats,
-								});
-							}
+						var values = valueStr.Replace("(", "").Replace(")", "").Replace(";", "").Split(',');
+						if (values == null || values.Length < 3) { break; }
+						if (int.TryParse(values[0], out int _offset) && float.TryParse(values[1], out float _bpm) && float.TryParse(values[2], out float _beats)) {
+							Timings.Add(new Timing() {
+								Time = _offset,
+								BPM = _bpm,
+								Beat = _beats,
+							});
 						}
-						break;
+					}
+					break;
 					case "camera": {
 
 
 
-						}
-						break;
+					}
+					break;
 				}
 			}
 			return true;
