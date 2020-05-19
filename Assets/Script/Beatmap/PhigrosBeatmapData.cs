@@ -88,6 +88,7 @@
 				Notes = { },
 				Timings = { },
 			};
+			float spb = 60f / sMap.bpm;
 			for (int index = 0; index < pMap.judgeLineList.Length; index++) {
 				var jLine = pMap.judgeLineList[index];
 				// Stages
@@ -98,10 +99,10 @@
 					if (d.start == 1) {
 						// Time
 						if (time < -0.5f) {
-							time = GetRealTime(d.startTime);
+							time = GetRealTime(d.startTime, spb);
 						}
 						// Duration
-						duration = Mathf.Max(GetRealTime(d.endTime) - time, duration);
+						duration = Mathf.Max(GetRealTime(d.endTime, spb) - time, duration);
 					}
 				}
 				sMap.Stages.Add(new Beatmap.Stage() {
@@ -115,9 +116,9 @@
 					X = 0f,
 					Y = 0f,
 					Color = 0,
-					Positions = GetStagePositions(jLine.judgeLineMoveEvents, -time),
-					Rotations = GetStageRotations(jLine.judgeLineRotateEvents, -time),
-					Colors = GetStageColors(jLine.judgeLineDisappearEvents, -time),
+					Positions = GetStagePositions(jLine.judgeLineMoveEvents, -time, spb),
+					Rotations = GetStageRotations(jLine.judgeLineRotateEvents, -time, spb),
+					Colors = GetStageColors(jLine.judgeLineDisappearEvents, -time, spb),
 					Widths = { },
 					Heights = { },
 				});
@@ -156,9 +157,9 @@
 				foreach (var note in jLine.notesAbove) {
 					sMap.Notes.Add(new Beatmap.Note() {
 						TrackIndex = index * 2,
-						Time = GetRealTime(note.time),
+						Time = GetRealTime(note.time, spb),
 						X = Util.Remap(-10f, 10f, 0f, 1f, note.positionX),
-						Duration = note.type == (int)NoteType.Hold ? GetRealTime(note.holdTime) : 0f,
+						Duration = note.type == (int)NoteType.Hold ? GetRealTime(note.holdTime, spb) : 0f,
 						ClickSoundIndex = 0,
 						ItemType = note.type - 1,
 						LinkedNoteIndex = -1,
@@ -172,9 +173,9 @@
 				foreach (var note in jLine.notesBelow) {
 					sMap.Notes.Add(new Beatmap.Note() {
 						TrackIndex = index * 2 + 1,
-						Time = GetRealTime(note.time),
+						Time = GetRealTime(note.time, spb),
 						X = Util.Remap(-10f, 10f, 0f, 1f, note.positionX),
-						Duration = note.type == (int)NoteType.Hold ? GetRealTime(note.holdTime) : 0f,
+						Duration = note.type == (int)NoteType.Hold ? GetRealTime(note.holdTime, spb) : 0f,
 						ClickSoundIndex = 0,
 						ItemType = note.type - 1,
 						LinkedNoteIndex = -1,
@@ -260,19 +261,19 @@
 
 
 		// LGC
-		private static List<Beatmap.TimeFloatFloatTween> GetStagePositions (JudgeLineEvent[] moves, float timeOffset) {
+		private static List<Beatmap.TimeFloatFloatTween> GetStagePositions (JudgeLineEvent[] moves, float timeOffset, float spb) {
 			var result = new List<Beatmap.TimeFloatFloatTween>();
 			if (moves == null || moves.Length == 0) { return result; }
 			for (int i = 0; i < moves.Length; i++) {
 				var m = moves[i];
 				result.Add(new Beatmap.TimeFloatFloatTween() {
-					Time = Mathf.Max(Mathf.Max(GetRealTime(m.startTime), 0f) + timeOffset, 0f),
+					Time = Mathf.Max(Mathf.Max(GetRealTime(m.startTime, spb), 0f) + timeOffset, 0f),
 					A = Util.Remap(0f, 880f, 0f, 1f, m.start / 1000),
 					B = Util.Remap(0f, 520f, 0f, 520f / 880f, m.start % 1000),
 					Tween = 0,
 				});
 				result.Add(new Beatmap.TimeFloatFloatTween() {
-					Time = Mathf.Max(Mathf.Max(GetRealTime(m.endTime), 0f) + timeOffset - 0.00001f, 0f),
+					Time = Mathf.Max(Mathf.Max(GetRealTime(m.endTime, spb), 0f) + timeOffset - 0.00001f, 0f),
 					A = Util.Remap(0f, 880f, 0f, 1f, m.end / 1000),
 					B = Util.Remap(0f, 520f, 0f, 520f / 880f, m.end % 1000),
 					Tween = 0,
@@ -280,36 +281,36 @@
 			}
 			return result;
 		}
-		private static List<Beatmap.TimeFloatTween> GetStageRotations (JudgeLineEvent[] rots, float timeOffset) {
+		private static List<Beatmap.TimeFloatTween> GetStageRotations (JudgeLineEvent[] rots, float timeOffset, float spb) {
 			var result = new List<Beatmap.TimeFloatTween>();
 			if (rots == null || rots.Length == 0) { return result; }
 			for (int i = 0; i < rots.Length; i++) {
 				var r = rots[i];
 				result.Add(new Beatmap.TimeFloatTween() {
-					Time = Mathf.Max(Mathf.Max(GetRealTime(r.startTime), 0f) + timeOffset, 0f),
-					Value = r.start,
+					Time = Mathf.Max(Mathf.Max(GetRealTime(r.startTime, spb), 0f) + timeOffset, 0f),
+					Value = -r.start,
 					Tween = 0,
 				});
 				result.Add(new Beatmap.TimeFloatTween() {
-					Time = Mathf.Max(Mathf.Max(GetRealTime(r.endTime), 0f) + timeOffset - 0.00001f, 0f),
-					Value = r.end,
+					Time = Mathf.Max(Mathf.Max(GetRealTime(r.endTime, spb), 0f) + timeOffset - 0.00001f, 0f),
+					Value = -r.end,
 					Tween = 0,
 				});
 			}
 			return result;
 		}
-		private static List<Beatmap.TimeIntTween> GetStageColors (JudgeLineEvent[] dis, float timeOffset) {
+		private static List<Beatmap.TimeIntTween> GetStageColors (JudgeLineEvent[] dis, float timeOffset, float spb) {
 			var result = new List<Beatmap.TimeIntTween>();
 			if (dis == null || dis.Length == 0) { return result; }
 			for (int i = 0; i < dis.Length; i++) {
 				var d = dis[i];
 				result.Add(new Beatmap.TimeIntTween() {
-					Time = Mathf.Max(Mathf.Max(GetRealTime(d.startTime), 0f) + timeOffset, 0f),
+					Time = Mathf.Max(Mathf.Max(GetRealTime(d.startTime, spb), 0f) + timeOffset, 0f),
 					Value = 1 - d.start,
 					Tween = 0,
 				});
 				result.Add(new Beatmap.TimeIntTween() {
-					Time = Mathf.Max(Mathf.Max(GetRealTime(d.endTime), 0f) + timeOffset - 0.00001f, 0f),
+					Time = Mathf.Max(Mathf.Max(GetRealTime(d.endTime, spb), 0f) + timeOffset - 0.00001f, 0f),
 					Value = 1 - d.end,
 					Tween = 0,
 				});
@@ -387,8 +388,13 @@
 			return result.ToArray();
 		}
 
-		private static float GetRealTime (int fuckedTime) =>
-			Mathf.Max(fuckedTime / 100f * 1.0475019f, 0f);
+		private static float GetRealTime (int fuckedTime, float spb) {
+			// 0.32 ?
+			// 179 >> 0.33519 >> 1.0475019    
+			// 120 >> 0.50000 >> 1.5625 ?
+			// 140 >> 0.42857 >> 1.3392 ?
+			return Mathf.Max(fuckedTime / 100f * (spb / 0.32f), 0f);
+		}
 
 
 	}

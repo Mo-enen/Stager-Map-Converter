@@ -319,7 +319,7 @@
 
 
 		private string[] GetPathsFromDialog (string mapName, bool forAll, params string[] exts) {
-			string[] paths = null;
+			List<string> paths = new List<string>();
 			if (forAll) {
 				string folderPath = DialogUtil.PickFolderDialog($"Pick folder for {mapName} Map");
 				if (!string.IsNullOrEmpty(folderPath)) {
@@ -328,15 +328,19 @@
 						fixedExts[i] = "*." + exts[i];
 					}
 					var files = Util.GetFilesIn(folderPath, false, fixedExts);
-					paths = new string[files.Length];
-					for (int i = 0; i < paths.Length; i++) {
-						paths[i] = files[i].FullName;
+					for (int i = 0; i < files.Length; i++) {
+						var p = files[i].FullName;
+						string pName = Util.GetNameWithoutExtension(Util.GetParentPath(p));
+						if (pName == $"Stager_to_{mapName}" || pName == $"{mapName}_to_Stager") {
+							continue;
+						}
+						paths.Add(p);
 					}
 				}
 			} else {
-				paths = DialogUtil.PickFilesDialog($"Pick {mapName} Map files", $"{mapName} Map", exts);
+				paths.AddRange(DialogUtil.PickFilesDialog($"Pick {mapName} Map files", $"{mapName} Map", exts));
 			}
-			return paths;
+			return paths.ToArray();
 		}
 
 

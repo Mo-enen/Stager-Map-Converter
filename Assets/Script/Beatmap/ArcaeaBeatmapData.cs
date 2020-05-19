@@ -65,7 +65,7 @@
 		private readonly static List<Note> Notes = new List<Note>();
 		private readonly static List<Timing> Timings = new List<Timing>();
 		private readonly static List<(Arc arc, bool done)> Arcs = new List<(Arc, bool)>();
-		private const float SCALE_Z = 0.2f;
+		private const float SCALE_Z = 0.1f;
 
 
 
