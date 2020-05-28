@@ -80,6 +80,21 @@
 				return (start + end) / 2;
 			}
 
+			public static void FixOverlap (List<TimeFloatTween> data) {
+				if (data == null) { return; }
+				for (int i = 0; i < data.Count - 1; i++) {
+					var a = data[i];
+					while (i < data.Count - 1) {
+						var b = data[i + 1];
+						if (a.time == b.time && a.value == b.value) {
+							data.RemoveAt(i + 1);
+						} else {
+							break;
+						}
+					}
+				}
+			}
+
 		}
 
 
@@ -123,6 +138,23 @@
 				}
 				return (start + end) / 2;
 			}
+
+
+			public static void FixOverlap (List<TimeIntTween> data) {
+				if (data == null) { return; }
+				for (int i = 0; i < data.Count - 1; i++) {
+					var a = data[i];
+					while (i < data.Count - 1) {
+						var b = data[i + 1];
+						if (a.time == b.time && a.value == b.value) {
+							data.RemoveAt(i + 1);
+						} else {
+							break;
+						}
+					}
+				}
+			}
+
 
 		}
 
@@ -177,6 +209,23 @@
 				return (start + end) / 2;
 			}
 
+
+			public static void FixOverlap (List<TimeFloatFloatTween> data) {
+				if (data == null) { return; }
+				for (int i = 0; i < data.Count - 1; i++) {
+					var a = data[i];
+					while (i < data.Count - 1) {
+						var b = data[i + 1];
+						if (a.time == b.time && a.a == b.a && a.b == b.b) {
+							data.RemoveAt(i + 1);
+						} else {
+							break;
+						}
+					}
+				}
+			}
+
+
 		}
 
 
@@ -201,12 +250,17 @@
 				get => itemType;
 				set => itemType = value;
 			}
+			public float Speed {
+				get => speed / 1000f;
+				set => speed = Mathf.RoundToInt(value * 1000f);
+			}
 
 			// Ser
 			public int itemType = 0;
 			public int time = 0;
 			public int duration = 0;
 			public int x = 0;
+			public int speed = 1000;
 
 			// Cache
 			[System.NonSerialized] public bool _Active = false;
@@ -224,10 +278,6 @@
 
 
 			// API
-			public float Speed {
-				get => speed / 1000f;
-				set => speed = Mathf.RoundToInt(value * 1000f);
-			}
 			public float Y {
 				get => y / 1000f;
 				set => y = Mathf.RoundToInt(value * 1000f);
@@ -274,7 +324,6 @@
 			}
 
 			// SER-API
-			public int speed = 1000;
 			public int y = 0;
 			public int width = 1000;
 			public int height = 1000;
@@ -288,7 +337,7 @@
 			public List<TimeFloatTween> heights;
 
 			// Cache
-			[System.NonSerialized] public int _TrackCount = 0;
+			[System.NonSerialized] public int c_TrackCount = 0;
 
 
 			// API
@@ -318,6 +367,15 @@
 							break;
 					}
 				}
+			}
+
+
+			public void FixOverlapMotion () {
+				TimeFloatFloatTween.FixOverlap(Positions);
+				TimeFloatTween.FixOverlap(Rotations);
+				TimeIntTween.FixOverlap(Colors);
+				TimeFloatTween.FixOverlap(Widths);
+				TimeFloatTween.FixOverlap(Heights);
 			}
 
 
@@ -380,9 +438,9 @@
 			public List<TimeFloatTween> widths;
 
 			// Cache
-			[System.NonSerialized] public (float min, float max) _TrayX = (0.5f, 0.5f);
-			[System.NonSerialized] public float _TrayTime = float.MaxValue;
-			[System.NonSerialized] public Color _Tint = UnityEngine.Color.white;
+			[System.NonSerialized] public (float min, float max) c_TrayX = (0.5f, 0.5f);
+			[System.NonSerialized] public float c_TrayTime = float.MaxValue;
+			[System.NonSerialized] public Color c_Tint = UnityEngine.Color.white;
 
 
 			// API
@@ -408,6 +466,14 @@
 							break;
 					}
 				}
+			}
+
+
+			public void FixOverlapMotion () {
+				TimeFloatTween.FixOverlap(Xs);
+				TimeFloatTween.FixOverlap(Angles);
+				TimeIntTween.FixOverlap(Colors);
+				TimeFloatTween.FixOverlap(Widths);
 			}
 
 
@@ -480,7 +546,7 @@
 		public class Timing : MapItem {
 
 			// API
-			public float Speed {
+			public float Value {
 				get => x / 100f;
 				set => x = Mathf.RoundToInt(value * 100f);
 			}
@@ -510,9 +576,9 @@
 			[System.NonSerialized] public float _CacheTime = -1f;
 
 			// API
-			public Timing (float time, float speed) {
+			public Timing (float time, float value) {
 				Time = time;
-				Speed = speed;
+				Value = value;
 			}
 
 		}
@@ -587,6 +653,7 @@
 
 
 		public void FixEmpty () {
+
 			if (Stages is null) {
 				Stages = new List<Stage>();
 			}
@@ -599,6 +666,15 @@
 			if (Timings is null) {
 				Timings = new List<Timing>();
 			}
+
+			// Fix Overlap Motions
+			foreach (var stage in Stages) {
+				stage.FixOverlapMotion();
+			}
+			foreach (var track in Tracks) {
+				track.FixOverlapMotion();
+			}
+
 			// Sort Motion 
 			foreach (var stage in Stages) {
 				stage.SortMotion();
@@ -788,6 +864,12 @@
 				item.Duration = duration;
 			}
 		}
+		public void SetSpeed (int type, int index, float speed) {
+			var item = GetItem(type, index);
+			if (item != null) {
+				item.Speed = speed;
+			}
+		}
 		public float GetSpeedMuti (int type, int index) {
 			var item = GetItem(type, index);
 			return item != null ? item._SpeedMuti : 1f;
@@ -796,11 +878,6 @@
 		public void SetStageY (int index, float y) {
 			if (index >= 0 && index < Stages.Count) {
 				Stages[index].Y = y;
-			}
-		}
-		public void SetStageSpeed (int index, float speed) {
-			if (index >= 0 && index < Stages.Count) {
-				Stages[index].Speed = speed;
 			}
 		}
 		public void SetStagePivot (int index, float pivot) {
@@ -896,9 +973,9 @@
 			}
 		}
 
-		public void SetTimingSpeed (int index, int speed) {
+		public void SetTimingX (int index, int x) {
 			if (index >= 0 && index < Timings.Count) {
-				Timings[index].x = speed;
+				Timings[index].x = x;
 			}
 		}
 		public void SetTimingSfxIndex (int index, byte sfx) {
@@ -1011,41 +1088,40 @@
 			switch (type) {
 				case 0:
 					if (index >= 0 && index < Stages.Count) {
-						Stages.RemoveAt(index);
-						foreach (var track in Tracks) {
-							if (track.StageIndex > index) {
-								track.StageIndex--;
-							}
-						}
 						for (int i = 0; i < Tracks.Count; i++) {
 							var track = Tracks[i];
 							if (track.StageIndex == index && DeleteItem(1, i)) {
 								i--;
 							}
 						}
+						foreach (var track in Tracks) {
+							if (track.StageIndex > index) {
+								track.StageIndex--;
+							}
+						}
+						Stages.RemoveAt(index);
 						return true;
 					}
 					break;
 				case 1:
 					if (index >= 0 && index < Tracks.Count) {
-						Tracks.RemoveAt(index);
-						foreach (var note in Notes) {
-							if (note.TrackIndex > index) {
-								note.TrackIndex--;
-							}
-						}
 						for (int i = 0; i < Notes.Count; i++) {
 							var note = Notes[i];
 							if (note.TrackIndex == index && DeleteItem(2, i)) {
 								i--;
 							}
 						}
+						foreach (var note in Notes) {
+							if (note.TrackIndex > index) {
+								note.TrackIndex--;
+							}
+						}
+						Tracks.RemoveAt(index);
 						return true;
 					}
 					break;
 				case 2:
 					if (index >= 0 && index < Notes.Count) {
-						Notes.RemoveAt(index);
 						foreach (var note in Notes) {
 							if (note.LinkedNoteIndex > index) {
 								note.LinkedNoteIndex--;
@@ -1053,6 +1129,7 @@
 								note.LinkedNoteIndex = -1;
 							}
 						}
+						Notes.RemoveAt(index);
 						return true;
 					}
 					break;
@@ -1341,12 +1418,13 @@
 		}
 
 
-		public (bool hasA, bool hasB) SearchMotionValueTween (int itemIndex, int motionType, float motionTime, out float valueA, out float valueB, out int tween) {
+		public (bool hasA, bool hasB) SearchMotionValueTween (int itemIndex, int motionType, float motionTime, out float valueA, out float valueB, out int tween, out int motionIndex) {
 			valueA = valueB = tween = 0;
+			motionIndex = -1;
 			var list = GetMotionList(itemIndex, motionType);
 			if (list != null) {
-				int i = MotionSearch(list, motionTime);
-				return i >= 0 && i < list.Count - 1 ? GetMotionValueTween(list[i], out valueA, out valueB, out tween) : (false, false);
+				motionIndex = MotionSearch(list, motionTime);
+				return motionIndex >= 0 && motionIndex < list.Count - 1 ? GetMotionValueTween(list[motionIndex], out valueA, out valueB, out tween) : (false, false);
 			}
 			return (false, false);
 		}
@@ -1355,8 +1433,8 @@
 		public void SetMotionValueTween (int itemIndex, int motionType, int motionIndex, float? valueA = null, float? valueB = null, int? tween = null) {
 			var list = GetMotionList(itemIndex, motionType);
 			if (list != null && motionIndex >= 0 && motionIndex < list.Count) {
-				var item = list[motionIndex];
 				if (valueA.HasValue) {
+					var item = list[motionIndex];
 					if (item is TimeIntTween tItem) {
 						tItem.Value = Mathf.RoundToInt(valueA.Value);
 						list[motionIndex] = tItem;
@@ -1369,12 +1447,14 @@
 					}
 				}
 				if (valueB.HasValue) {
+					var item = list[motionIndex];
 					if (item is TimeFloatFloatTween ffItem) {
 						ffItem.B = valueB.Value;
 						list[motionIndex] = ffItem;
 					}
 				}
 				if (tween.HasValue) {
+					var item = list[motionIndex];
 					if (item is TimeIntTween tItem) {
 						tItem.Tween = tween.Value;
 						list[motionIndex] = tItem;

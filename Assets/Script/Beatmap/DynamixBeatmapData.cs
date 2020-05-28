@@ -132,6 +132,7 @@
 						HasTray = false,
 						Color = 9,
 						Angle = 0f,
+						Speed = 1f,
 						Xs = { },
 						Widths = { },
 						Colors = { },
@@ -142,6 +143,7 @@
 						Time = 0f,
 						StageIndex = 1,
 						Width = 1f,
+						Speed = 1f,
 						X = 0.5f,
 						HasTray = dMap.m_rightRegion == "MIXER",
 						Color = 9,
@@ -156,6 +158,7 @@
 						Time = 0f,
 						StageIndex = 2,
 						Width = 1f,
+						Speed = 1f,
 						X = 0.5f,
 						HasTray = dMap.m_leftRegion == "MIXER",
 						Color = 9,
@@ -246,6 +249,7 @@
 						ItemType = (int)GetNoteTypeFromDynamix(note.m_type),
 						LinkedNoteIndex = -1,
 						ClickSoundIndex = 0,
+						Speed = 1f,
 					});
 				}
 			}

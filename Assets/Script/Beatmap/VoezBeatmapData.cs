@@ -153,6 +153,7 @@
 					LinkedNoteIndex = -1,
 					ClickSoundIndex = 0,
 					ItemType = (int)type,
+					Speed = 1f,
 				});
 			}
 
@@ -188,6 +189,7 @@
 					),
 					StageIndex = 0,
 					HasTray = false,
+					Speed = 1f,
 					Angles = { },
 				};
 			}

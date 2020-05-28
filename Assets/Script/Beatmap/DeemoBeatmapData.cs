@@ -114,6 +114,7 @@
 						Width = 1f,
 						X = 0.5f,
 						HasTray = false,
+						Speed = 1f,
 						Color = 1,
 						Angle = 30,
 						Xs = { },
@@ -151,6 +152,7 @@
 						Duration = 0f,
 						ClickSoundIndex = (short)(dNote.sounds == null || dNote.sounds.Length == 0 ? -1 : 0),
 						TrackIndex = 0,
+						Speed = 1f,
 					};
 				}
 			}

@@ -163,6 +163,7 @@
 						StageIndex = 0,
 						Color = 3,
 						Angle = 0f,
+						Speed = 1f,
 						HasTray = false,
 						Colors = { },
 						Widths = { },
@@ -183,6 +184,7 @@
 						Duration = !hit.Hold ? 0f : Mathf.Max((hit.EndTime - hit.Time) / 1000f, 0f),
 						LinkedNoteIndex = -1,
 						Time = hit.Time / 1000f,
+						Speed = 1f,
 						Width = 1f,
 						ItemType = 0,
 					});
