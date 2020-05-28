@@ -6,6 +6,8 @@
 
 ##### 注意事项
 
+- 目前仅有PC版本，请到 Release 板块下载最新版
+
 - 使用前需要先将压缩包解压
 
 - 支持的音游：`Arcaea`，`BMS`，`Deemo`，`Dynamix`，`SDVX(KShootMania)`，`OSU-Mania`，`Phigros`，`Voez`
