@@ -4,9 +4,19 @@
 
 
 
-![ScreenShot](ScreenShot.png)
+##### 需求
 
+- Unity2020.2.0f1
 
+- .Net4.X
+
+- Package: Unity UI
+
+    
+
+![ScreenShot](Resource/ScreenShot.png)
+
+![Package](Resource/Package.png)
 
 ##### 注意事项
 
