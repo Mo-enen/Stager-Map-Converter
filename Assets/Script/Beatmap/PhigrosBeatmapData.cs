@@ -2,7 +2,6 @@
 	using System.Collections;
 	using System.Collections.Generic;
 	using UnityEngine;
-	using UnityEditor;
 
 
 	[System.Serializable]
@@ -18,7 +17,7 @@
 			Flick = 4,
 		}
 
-		
+
 
 
 		[System.Serializable]
