@@ -18,7 +18,7 @@
 			Flick = 4,
 		}
 
-
+		
 
 
 		[System.Serializable]
